@@ -4,7 +4,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace BlazorStatic;
 
-using System.Net;
+using Services;
 
 /// <summary>
 ///     Options for configuring the BlazorStatic generation process.
@@ -43,7 +43,7 @@ public class BlazorStaticOptions
     ///     The sitemap file follows the Google model:<br />
     ///     https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap#xml
     /// </summary>
-    public bool ShouldGenerateSitemap { get; set; } = false;
+    public bool ShouldGenerateSitemap { get; set; }
 
     /// <summary>
     ///     Hostname of your site. Needed to generate the sitemap. <br />
@@ -145,86 +145,106 @@ public class BlazorStaticOptions
 ///     Default values are set to work with posts (<see cref="ContentPath" /> and <see cref="PageUrl" /> ) .
 /// </summary>
 /// <typeparam name="TFrontMatter"></typeparam>
-public class BlazorStaticContentOptions<TFrontMatter>
+public interface IBlazorStaticContentOptions<TFrontMatter>
     where TFrontMatter : class, IFrontMatter
 {
     /// <summary>
-    ///     folder relative to project root where posts are stored.
-    ///     Don't forget to copy the content to bin folder (use CopyToOutputDirectory in .csproj),
-    ///     because that's where the app will look for the files.
-    ///     Default is Content/Blog where posts are stored.
+    /// Folder relative to project root where posts are stored.
+    /// Don't forget to copy the content to bin folder (use CopyToOutputDirectory in .csproj),
+    /// because that's where the app will look for the files.
+    /// Default is Content/Blog where posts are stored.
     /// </summary>
-    public string ContentPath { get; set; } = Path.Combine("Content", "Blog");
-    /// <summary>
-    ///     folder in ContentPath where media files are stored.
-    ///     Important for app.UseStaticFiles targeting the correct folder.
-    ///     Null in case of no media folder
-    /// </summary>
-    public string? MediaFolderRelativeToContentPath { get; set; } = "media";
+    string ContentPath { get; set; }
 
     /// <summary>
-    ///     URL path for media files for posts.
-    ///     Used in app.UseStaticFiles to target the correct folder
-    ///     and in ParseAndAddPosts to generate correct URLs for images
-    ///     changes ![alt](media/image.png) to ![alt](Content/Blog/media/image.png
-    ///     leading slash / is necessary for RequestPath in app.UseStaticFiles,
-    ///     is removed in ParseAndAddPosts.
-    ///     Null in case of no media.
+    /// Folder in ContentPath where media files are stored.
+    /// Important for app.UseStaticFiles targeting the correct folder.
+    /// Null in case of no media folder.
     /// </summary>
-    public string? MediaRequestPath => MediaFolderRelativeToContentPath is null
+    string? MediaFolderRelativeToContentPath { get; set; }
+
+
+    /// <summary>
+    /// URL path for media files for posts.
+    /// Used in app.UseStaticFiles to target the correct folder
+    /// and in ParseAndAddPosts to generate correct URLs for images.
+    /// Changes ![alt](media/image.png) to ![alt](Content/Blog/media/image.png).
+    /// Leading slash / is necessary for RequestPath in app.UseStaticFiles,
+    /// and is removed in ParseAndAddPosts. Null in case of no media.
+    /// </summary>
+    string? MediaRequestPath  => MediaFolderRelativeToContentPath is null
         ? null
         : Path.Combine(ContentPath, MediaFolderRelativeToContentPath).Replace(@"\", "/");
 
     /// <summary>
-    ///     pattern for blog post files in ContentPath
+    /// Pattern for blog post files in ContentPath.
     /// </summary>
-    public string PostFilePattern { get; set; } = "*.md";
-    /// <summary>
-    ///     Place where processed blog posts live (their HTML and front matter)
-    /// </summary>
-    public List<Post<TFrontMatter>> Posts { get; } = [];
-    /// <summary>
-    ///     tag pages will be generated from all tags found in blog posts
-    /// </summary>
-    public bool AddTagPagesFromPosts { get; set; } = true;
+    string PostFilePattern { get; set; }
 
     /// <summary>
-    /// Func to convert tag string to file-name/url.
-    /// You might want to change this if you don't like non-alphanumerical chars in your url (like tags/.net%2FC%23)
-    /// The default is WebUtility.UrlEncode, which makes changes, like:
-    /// "nice tag" -> "nice+tag", "ci/cd" -> "ci%2Fcd", ".net/C# " -> ".net%2FC%23".
-    /// Also don't forget to use the same encoder while creating tag links
+    /// Place where processed blog posts live (their HTML and front matter).
     /// </summary>
-    public Func<string,string> TagEncodeFunc { get; set; } = WebUtility.UrlEncode;
+    List<Post<TFrontMatter>> Posts { get; }
 
     /// <summary>
-    ///     Should correspond to page that keeps the list of content.
-    ///     For example: @page "/blog" -> PageUrl="blog"
-    ///     This also serves as a generated folder name for the content.
-    ///     Useful for avoiding magic strings in .razor files
-    ///     "blog" as default value
+    /// Should correspond to page that keeps the list of content.
+    /// For example: @page "/blog" -> PageUrl="blog".
+    /// This also serves as a generated folder name for the content.
+    /// Useful for avoiding magic strings in .razor files.
+    /// Default is "blog".
     /// </summary>
-    public string PageUrl { get; set; } = "blog";
-    /// <summary>
-    ///     Should correspond to @page "/tags" (here in relative path: "tags")
-    ///     Useful for avoiding magic strings in .razor files
-    /// </summary>
-    public string TagsPageUrl { get; set; } = "tags";
+    string PageUrl { get; set; }
 
     /// <summary>
-    ///     Action to run after content is parsed and added to the collection.
-    ///     Useful for editing data in the posts, such as changing image paths.
+    /// Action to run after content is parsed and added to the collection.
+    /// Useful for editing data in the posts, such as changing image paths.
     /// </summary>
-    public Action? AfterContentParsedAndAddedAction { get; set; }
+    Action<BlazorStaticService>? AfterContentParsedAndAddedAction { get; set; }
 
     /// <summary>
-    ///     Obsolete property. Use <see cref="AfterContentParsedAndAddedAction" /> instead. This property will be removed in
-    ///     future versions.
+    /// Validates the configuration properties to ensure required fields are set correctly.
+    /// This validation is run when registering the service.
     /// </summary>
-    [Obsolete("Use AfterContentParsedAction instead. This property will be removed in future versions.")]
-    public Action? AfterBlogParsedAndAddedAction
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if <see cref="ContentPath"/> or <see cref="PageUrl"/> are null or empty.
+    /// </exception>
+    void CheckOptions()
     {
-        get => AfterContentParsedAndAddedAction;
-        set => AfterContentParsedAndAddedAction = value;
+        if (string.IsNullOrWhiteSpace(ContentPath))
+            throw new InvalidOperationException("ContentPath must be set and cannot be null or empty.");
+
+        if (string.IsNullOrWhiteSpace(PageUrl))
+            throw new InvalidOperationException("PageUrl must be set and cannot be null or empty.");
     }
+
 }
+
+/// <inheritdoc />
+public class BlazorStaticContentOptions<TFrontMatter> : IBlazorStaticContentOptions<TFrontMatter>
+    where TFrontMatter : class, IFrontMatter
+{
+    /// <inheritdoc />
+    public string ContentPath { get; set; } = null!;//is checked in "check opiton"
+
+    /// <inheritdoc />
+    public string? MediaFolderRelativeToContentPath { get; set; }
+
+    /// <inheritdoc />
+    public string? MediaRequestPath => MediaFolderRelativeToContentPath is null
+        ? null
+        : Path.Combine(ContentPath, MediaFolderRelativeToContentPath).Replace(@"\", "/");
+
+    /// <inheritdoc />
+    public string PostFilePattern { get; set; } = "*.md";
+
+    /// <inheritdoc />
+    public List<Post<TFrontMatter>> Posts { get; } = new();
+
+    /// <inheritdoc />
+    public string PageUrl { get; set; } = null!;//is checked in check options
+
+    /// <inheritdoc />
+    public Action<BlazorStaticService>? AfterContentParsedAndAddedAction { get; set; }
+}
+
+

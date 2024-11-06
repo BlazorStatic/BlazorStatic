@@ -4,7 +4,8 @@
 @using BlazorStatic.Services
 @using BlazorStaticWebsite.Components.Blog
 @using System.Net
-@inject BlazorStaticContentService<BlogFrontMatter> BlazorStaticContentService
+@inject BlogService<BlogFrontMatter> BlazorStaticContentService
+
 
 @if (TagEncodedName == null)
 {

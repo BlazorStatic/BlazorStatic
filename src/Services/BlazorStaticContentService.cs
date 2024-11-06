@@ -2,26 +2,21 @@ using System.Reflection;
 
 namespace BlazorStatic.Services;
 
-using System.Text.Encodings.Web;
-using System.Web;
-
 /// <summary>
 ///     The BlazorStaticContentService is responsible for parsing and adding blog posts.
 ///     It adds pages with blog posts to the options.PagesToGenerate list,
 ///     that is used later by BlazorStaticService to generate static pages.
 /// </summary>
-/// a
-/// <param name="options"></param>
-/// <param name="helpers"></param>
-/// <param name="blazorStaticService"></param>
-/// <typeparam name="TFrontMatter"></typeparam>
-public class BlazorStaticContentService<TFrontMatter>(
-    BlazorStaticContentOptions<TFrontMatter> options,
+/// /// <typeparam name="TFrontMatter"></typeparam>
+/// <typeparam name="TBlazorStaticContentOptions"></typeparam>
+public class BlazorStaticContentService<TFrontMatter, TBlazorStaticContentOptions>(
+    TBlazorStaticContentOptions options,
     BlazorStaticHelpers helpers,
     BlazorStaticService blazorStaticService)
     where TFrontMatter : class, IFrontMatter, new()
+    where  TBlazorStaticContentOptions: IBlazorStaticContentOptions<TFrontMatter>
 {
-    /// <summary>
+     /// <summary>
     ///     The list of posts parsed and added to the BlazorStaticContentService.
     /// </summary>
     public List<Post<TFrontMatter>> Posts => options.Posts;
@@ -36,7 +31,7 @@ public class BlazorStaticContentService<TFrontMatter>(
     /// <summary>
     ///     The BlazorStaticContentOptions used to configure the BlazorStaticContentService.
     /// </summary>
-    public BlazorStaticContentOptions<TFrontMatter> Options => options;
+    public TBlazorStaticContentOptions Options => options;
 
 
     /// <summary>
@@ -91,19 +86,7 @@ public class BlazorStaticContentService<TFrontMatter>(
             var pathWithMedia = Path.Combine(options.ContentPath, options.MediaFolderRelativeToContentPath);
             blazorStaticService.Options.ContentToCopyToOutput.Add(new ContentToCopy(pathWithMedia, pathWithMedia));
         }
-        //add tags pages
-        if(options.AddTagPagesFromPosts)
-        {
-            // blazorStaticService.Options.PagesToGenerate.Add(new($"{options.TagsPageUrl}", Path.Combine(options.TagsPageUrl, "index.html")));
-            foreach(var tag in options.Posts.SelectMany(x => x.FrontMatter.Tags).Distinct())//gather all unique tags from all posts
-            {
-                var encodedTag = options.TagEncodeFunc(tag);
-                blazorStaticService.Options.PagesToGenerate.Add(new PageToGenerate($"{options.TagsPageUrl}/{encodedTag}",
-                Path.Combine(options.TagsPageUrl, $"{encodedTag}.html")));
-            }
-        }
-
-        options.AfterContentParsedAndAddedAction?.Invoke();
+        options.AfterContentParsedAndAddedAction?.Invoke(blazorStaticService);
         return;
 
         string[] GetPostsPath()
@@ -133,3 +116,13 @@ public class BlazorStaticContentService<TFrontMatter>(
         }
     }
 }
+
+/// <inheritdoc />
+public class BlazorStaticContentService<TFrontMatter>(
+    BlazorStaticContentOptions<TFrontMatter> options,
+    BlazorStaticHelpers helpers,
+    BlazorStaticService blazorStaticService)
+    : BlazorStaticContentService<TFrontMatter, BlazorStaticContentOptions<TFrontMatter>>(options, helpers, blazorStaticService)
+    where TFrontMatter : class, IFrontMatter, new();
+
+

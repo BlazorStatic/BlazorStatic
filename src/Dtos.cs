@@ -5,14 +5,7 @@
 /// </summary>
 public interface IFrontMatter
 {
-    /// <summary>
-    ///     Tags for the blog post. When no tags are specified, implement empty list.
-    ///     If you have a different name for tags, or tags in complex objects, expose tags as a list of strings here.
-    ///     Useful for generating tag pages.
-    /// </summary>
-    List<string> Tags { get; set; }
-
-    /// <summary>
+        /// <summary>
     ///     If true, the blog post will not be generated.
     /// </summary>
     bool IsDraft => false;
@@ -25,10 +18,24 @@ public interface IFrontMatter
     AdditionalInfo? AdditionalInfo => null;
 }
 
+
 /// <summary>
-///     Showcase of a front matter class. If you have a different front matter format, implement your own class.
+/// For blog front matter that has Tags
 /// </summary>
-public class BlogFrontMatter : IFrontMatter
+public interface IBlogFrontMatter : IFrontMatter
+{
+    /// <summary>
+    ///     Tags for the blog post. When no tags are specified, implement empty list.
+    ///     If you have a different name for tags, or tags in complex objects, expose tags as a list of strings here.
+    ///     Useful for generating tag pages.
+    /// </summary>
+     List<string> Tags { get; set; }
+}
+
+/// <summary>
+///     Showcase of a IBlogFrontMatter implementation. If you have a different front matter format, implement your own class.
+/// </summary>
+public class BlogFrontMatter : IBlogFrontMatter
 {
     /// <summary>
     ///     Title of the blog post.
@@ -47,8 +54,9 @@ public class BlogFrontMatter : IFrontMatter
     ///     Authors of the blog post.
     /// </summary>
     public List<Author> Authors { get; set; } = [];
-    /// <inheritdoc />
-    public List<string> Tags { get; set; } = [];
+
+
+
 
     /// <inheritdoc />
     public bool IsDraft { get; set; }
@@ -57,6 +65,10 @@ public class BlogFrontMatter : IFrontMatter
     ///     <inheritdoc />
     /// </summary>
     public AdditionalInfo? AdditionalInfo => new() { LastMod = Published };
+
+
+    /// <inheritdoc />
+    public List<string> Tags { get; set; } = [];
 }
 
 /// <summary>
@@ -84,7 +96,6 @@ public class Author
 /// <typeparam name="TFrontMatter"></typeparam>
 public class Post<TFrontMatter>
     where TFrontMatter : class
-
 {
     /// <summary>
     ///     Front matter of the post.

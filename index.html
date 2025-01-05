@@ -26,7 +26,7 @@
         <main class="mb-auto"><div class="prose prose-invert&#xA;[&amp;_img]:inline-block&#xA;[&amp;_#imglogo]:hidden&#xA;"><h1 id="section"><img id="imglogo" src="./BlazorStaticWebsite/wwwroot/imgs/logo.png" alt="blazor static"></h1>
 <p><a href="https://discord.gg/DsAXsMuEbx"><img src="https://img.shields.io/discord/798312431893348414?style=flat&amp;logo=discord&amp;logoColor=white&amp;label=Blazor%20Community%2F%23BlazorStatic&amp;labelColor=5865f2&amp;color=gray" alt="Discord" /></a>
 <a href="https://www.nuget.org/packages/BlazorStatic/"><img src="https://img.shields.io/nuget/vpre/BlazorStatic" alt="Nuget (with prereleases)" /></a>
-<a href="https://github.com/BlazorStatic/BlazorStatic/actions/workflows/publish-to-ghpages-and-nuget.yml"><img src="https://github.com/BlazorStatic/BlazorStatic/actions/workflows/publish-to-ghpages-and-nuget.yml/badge.svg" alt="Build, publish to gh pages anN nuget" /></a>
+<a href="https://github.com/BlazorStatic/BlazorStatic/actions/workflows/publish-to-nuget.yml"><img src="https://github.com/BlazorStatic/BlazorStatic/actions/workflows/publish-to-nuget.yml/badge.svg" alt="Build, publish to gh pages anN nuget" /></a>
 <a href="https://app.netlify.com/sites/blazorstatic/deploys"><img src="https://api.netlify.com/api/v1/badges/4fa2c17a-6385-4cc6-9919-e32c134175d9/deploy-status" alt="Netlify Status" /></a></p>
 <p>Harness the power of <a href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor">Blazor</a> to craft static websites.</p>
 <p>Transform your Blazor app into a static site.</p>
@@ -44,7 +44,7 @@
 <pre><code class="language-sh">dotnet new install BlazorStatic.Templates
 </code></pre>
 <p>This adds new options to your <code>dotnet new</code> template list. Then create a new project using:</p>
-<pre><code class="language-sh">dotnet new BlazorStaticMinimalBlog -o MyBlazorStaticApp 
+<pre><code class="language-sh">dotnet new BlazorStaticMinimalBlog -o MyBlazorStaticApp
 </code></pre>
 <p>This creates a <code>MyBlazorStaticApp</code> folder and project. It's a standard .NET Blazor app with the BlazorStatic package installed, including a few predefined components, styles, and a blog post with example content.</p>
 <p>Run the app using <code>dotnet watch</code>. This will launch the app, allowing you to view it live, while also generating static HTML files in the <code>output</code> folder.</p>

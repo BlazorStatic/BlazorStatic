@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorStaticWebsite", "Blaz
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorStatic", "src\BlazorStatic.csproj", "{5654D958-8148-42FF-8014-0A942C50F2F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorStaticMinimalBlog", "BlazorStaticTemplates\templates\BlazorStaticMinimalBlogTemplate\BlazorStaticMinimalBlog\BlazorStaticMinimalBlog.csproj", "{144C2BCD-40FC-4219-9578-744DAF54A427}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{F2F18174-A096-421E-B89C-E0028EB14D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2F18174-A096-421E-B89C-E0028EB14D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2F18174-A096-421E-B89C-E0028EB14D93}.Release|Any CPU.Build.0 = Release|Any CPU
-		{144C2BCD-40FC-4219-9578-744DAF54A427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{144C2BCD-40FC-4219-9578-744DAF54A427}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{144C2BCD-40FC-4219-9578-744DAF54A427}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{144C2BCD-40FC-4219-9578-744DAF54A427}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

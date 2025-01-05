@@ -32,6 +32,10 @@ authors:
 - To access all unique tags, use the `BlazorStaticContentService.AllTags` property.
 
 
+## .NET9 support
+
+- Wasn't that difficult. Just adding the `.net9.0` to target frameworks in `BlazorStatic.csproj`.
+
 ## New Domain and GitHub Organization
 
 BlazorStatic has moved to its own GitHub organization. The repository links are now:
@@ -57,6 +61,14 @@ Now it explains better what is BlazorStatic about.
 ## Record on jamstack.org
 
 We’ve added BlazorStatic to the popular list of static site generators on [jamstack.org](https://jamstack.org/generators/).
+
+## Nuget package updates
+
+Updated the `YamlDotNet` and `Markdig` to keep up with the newest versions!
+
+## BlazorStatic nuget package update
+
+Better readme, new repo url, `<PackageProjectUrl>` to our brand new domain.
 
 ## Feedback
 

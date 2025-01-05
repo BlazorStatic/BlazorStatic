@@ -53,6 +53,10 @@ opt.Tags.AddTagPagesFromPosts = true // new
 <li><p>To access all unique tags, use the <code>BlazorStaticContentService.AllTags</code> property.</p>
 </li>
 </ul>
+<h2 id="net9-support">.NET9 support</h2>
+<ul>
+<li>Wasn't that difficult 🙂. Just adding the <code>.net9.0</code> to target frameworks in <code>BlazorStatic.csproj</code>.</li>
+</ul>
 <h2 id="new-domain-and-github-organization">New Domain and GitHub Organization</h2>
 <p>BlazorStatic has moved to its own GitHub organization. The repository links are now:</p>
 <ul>
@@ -70,6 +74,20 @@ opt.Tags.AddTagPagesFromPosts = true // new
 <p>Now it explains better what is BlazorStatic about.</p>
 <h2 id="record-on-jamstack.org">Record on jamstack.org</h2>
 <p>We’ve added BlazorStatic to the popular list of static site generators on <a href="https://jamstack.org/generators/">jamstack.org</a>.</p>
+<h2 id="nuget-package-updates">Nuget package updates</h2>
+<p>Updated the <code>YamlDotNet</code> and <code>Markdig</code> to keep up with the newest versions!</p>
+<h2 id="blazorstatic-nuget-package-update">BlazorStatic nuget package update</h2>
+<p>Better readme, new repo url, <code>&lt;PackageProjectUrl&gt;</code> to our brand-new domain.</p>
+<h2 id="blazorstatic.templates-and-blazorstaticminimalblog-repos">BlazorStatic.Templates and BlazorStaticMinimalBlog Repos</h2>
+<p>We’ve done some reorganization and created a new repo to house all the templates you can create with <code>dotnet new</code>.</p>
+<p>Right now, there’s one template: <code>dotnet new BlazorStaticMinimalBlog</code>, but more are expected to be added in the future.</p>
+<p>Check out the <a href="https://github.com/BlazorStatic/BlazorStatic.Templates">BlazorStatic.Templates repo</a>. It includes a GitHub action:
+<a href="https://github.com/BlazorStatic/BlazorStatic.Templates/blob/7cbf00a5a60bcb7bb2736e886547bf04c68878e5/.github/workflows/build-github-template.yml">build-github-template.yml</a>,
+which installs the <code>dotnet new</code> template, runs <code>dotnet new BlazorStaticMinimalBlog</code>, and pushes the result to <a href="https://github.com/BlazorStatic/BlazorStaticMinimalBlog">BlazorStaticMinimalBlog</a>—now a read-only GitHub &quot;green button&quot; template.</p>
+<p>This &quot;green button template&quot; provides a two-click way to get a BlazorStatic website running in your own repo, with no additional maintenance required. This allows us to focus entirely on the <code>dotnet new</code> template.</p>
+<p><img src="Content/Blog/media/release-1.0.0-beta.14/img.png" alt="BlazorStatic Template Screenshot" /></p>
+<p>As part of this change, the <code>BlazorStaticMinimalBlog</code> submodule has been removed from the main repo, and the <code>BlazorStatic.Templates</code> repo is no longer part of the main repo either.</p>
+<p>There are more updates coming to <code>BlazorStatic.Templates</code>.</p>
 <h2 id="feedback">Feedback</h2>
 <p>Share your feedback by <a href="https://github.com/BlazorStatic/BlazorStatic/issues/new">creating an issue</a> or join the conversation on the <a href="https://discord.gg/DsAXsMuEbx">Discord server</a>.</p>
 </div>
@@ -86,7 +104,7 @@ opt.Tags.AddTagPagesFromPosts = true // new
                 <div class="mb-2 flex space-x-2 text-sm text-gray-400"><a target="_blank" rel="noopener noreferrer" href="https://github.com/BlazorStatic/BlazorStatic/">Blazor Static</a>
                     <div>•</div>
                     <div>© 2025</div></div></div></footer></div></div>
-        </body>
+        <blazor-focus-on-navigate selector="h1"></blazor-focus-on-navigate></body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>

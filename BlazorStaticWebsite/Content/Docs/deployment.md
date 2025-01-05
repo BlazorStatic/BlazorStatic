@@ -104,6 +104,12 @@ For this site:
 - **Publish directory**: `/BlazorStaticWebsite/output`
 - **Functions directory**: `/netlify/functions`
 
+## Cloudflare Pages
+
+Works exactly the same as netlify does. It even uses the same build script.
+
+Check out the result: https://blazorstatic.pages.dev/
+
 ## Azure Static Web Apps
 
 [**TODO**](https://github.com/tesar-tech/BlazorStatic/issues/1)

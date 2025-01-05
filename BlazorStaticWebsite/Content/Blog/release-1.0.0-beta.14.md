@@ -1,7 +1,6 @@
 ---
-title: "1.0.0-beta.14 - Enhanced Tag Support and New BlazorStatic Domain"
-lead: "The 1.0.0-beta.14 release brings major updates to BlazorStatic, with enhanced tag encoding, reorganized options, and a dedicated new GitHub organization and domain."
-isDraft: true
+title: "1.0.0-beta.14 - Enhanced Tag Support, New blazorStatic.net Domain, Cloudflare support and more"
+lead: "The beta.14 release brings major updates to BlazorStatic, with enhanced tag encoding, reorganized options, and a dedicated new GitHub organization and domain."
 published: 2025-01-05
 tags: [release, tag encoder, blazorstatic.net , BlazorStatic organization]
 authors:
@@ -10,7 +9,6 @@ authors:
     xUserName: "tesar_tech"
   - name: "Patrick T Coakley"
     gitHubUserName: "patricktcoakley"
-
 ---
 
 ## Changes and Breaking Changes
@@ -43,6 +41,14 @@ BlazorStatic has moved to its own GitHub organization. The repository links are 
 The project homepage also has its own second-level domain:
 
 - [BlazorStatic.net](https://blazorstatic.net) — the .net domain is a fitting choice for a .NET-based project.
+
+## Cloudflare Pages support
+
+Check the result on https://blazorstatic.pages.dev/ and the guide [here](docs/deployment).
+
+## Readme.md updates
+
+Now it explains better what is BlazorStatic about.
 
 ## Feedback
 

@@ -1,5 +1,5 @@
 ---
-title: "1.0.0-beta.14 - Enhanced Tag Support, New blazorStatic.net Domain, Cloudflare support and more"
+title: "1.0.0-beta.14 - Enhanced Tag Support, New blazorStatic.net Domain, Licence Change (to MIT), Cloudflare support and more"
 lead: "The beta.14 release brings major updates to BlazorStatic, with enhanced tag encoding, reorganized options, and a dedicated new GitHub organization and domain."
 published: 2025-01-05
 tags: [release, tag encoder, blazorstatic.net , BlazorStatic organization]
@@ -46,9 +46,17 @@ The project homepage also has its own second-level domain:
 
 Check the result on https://blazorstatic.pages.dev/ and the guide [here](docs/deployment).
 
+## Licence change
+
+The license has been changed from the more restrictive AGPL to the less restrictive MIT.
+
 ## Readme.md updates
 
 Now it explains better what is BlazorStatic about.
+
+## Record on jamstack.org
+
+We’ve added BlazorStatic to the popular list of static site generators on [jamstack.org](https://jamstack.org/generators/).
 
 ## Feedback
 

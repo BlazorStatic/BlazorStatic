@@ -28,43 +28,33 @@
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.7</loc>
-    <lastmod>2024-06-10</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/the-origins-of-blazorstatic</loc>
-    <lastmod>2023-11-27</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.10</loc>
-    <lastmod>2024-08-19</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/first-release</loc>
-    <lastmod>2023-11-20</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.4</loc>
-    <lastmod>2024-01-20</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.14</loc>
-    <lastmod>2024-10-30</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.11</loc>
-    <lastmod>2024-09-03</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.9</loc>
-    <lastmod>2024-06-20</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.13</loc>
-    <lastmod>2024-10-08</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/subfolder/post-in-subfolder</loc>
-    <lastmod>2024-05-29</lastmod>
   </url>
   <url>
     <loc>https://blazorstatic.net/tags/release</loc>
@@ -106,13 +96,13 @@
     <loc>https://blazorstatic.net/tags/BlazorStatic%2borganization</loc>
   </url>
   <url>
-    <loc>https://blazorstatic.net/tags/dotnet%2bnew%2btemplate</loc>
-  </url>
-  <url>
     <loc>https://blazorstatic.net/tags/hot%2breload</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/tags/HotReload</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/dotnet%2bnew%2btemplate</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/tags/test</loc>

@@ -22,8 +22,9 @@ jobs:
       webapp-path: ${{ env.WEBAPP_PATH }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          submodules: recursive
+          dotnet-version: '9.0.x'
       - name: Remove launchSettings.json (to not override ASPNETCORE_ENVIRONMENT)
         run: rm ${{ env.WEBAPP_PATH }}/Properties/launchSettings.json
       - name: Tailwind - download and run cli

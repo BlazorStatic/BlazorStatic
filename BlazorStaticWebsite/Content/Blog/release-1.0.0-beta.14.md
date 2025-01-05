@@ -2,7 +2,7 @@
 title: "1.0.0-beta.14 - Enhanced Tag Support and New BlazorStatic Domain"
 lead: "The 1.0.0-beta.14 release brings major updates to BlazorStatic, with enhanced tag encoding, reorganized options, and a dedicated new GitHub organization and domain."
 isDraft: true
-published: 2024-11-11
+published: 2025-01-05
 tags: [release, tag encoder, blazorstatic.net , BlazorStatic organization]
 authors:
   - name: "Jan Tesař"

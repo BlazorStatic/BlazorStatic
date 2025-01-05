@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-## install latest .NET 8.0 release
+## install .NET
 pushd /tmp
 wget https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.sh
 chmod u+x /tmp/dotnet-install.sh
-/tmp/dotnet-install.sh --channel 8.0
+/tmp/dotnet-install.sh --channel 9.0
 
 ## install and run tailwind
 wget https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64

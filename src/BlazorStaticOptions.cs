@@ -163,8 +163,9 @@ public class BlazorStaticContentOptions<TFrontMatter>
     /// Folder in ContentPath where media files are stored.
     /// Important for app.UseStaticFiles targeting the correct folder.
     /// Null in case of no media folder.
+    /// Default is "media"
     /// </summary>
-    public string? MediaFolderRelativeToContentPath { get; set; }
+    public string? MediaFolderRelativeToContentPath { get; set; } = Path.Combine( "media" );
 
 
     /// <summary>

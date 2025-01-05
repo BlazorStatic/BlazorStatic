@@ -34,7 +34,7 @@ authors:
 
 ## .NET9 support
 
-- Wasn't that difficult. Just adding the `.net9.0` to target frameworks in `BlazorStatic.csproj`.
+- Wasn't that difficult 🙂. Just adding the `.net9.0` to target frameworks in `BlazorStatic.csproj`.
 
 ## New Domain and GitHub Organization
 
@@ -68,7 +68,25 @@ Updated the `YamlDotNet` and `Markdig` to keep up with the newest versions!
 
 ## BlazorStatic nuget package update
 
-Better readme, new repo url, `<PackageProjectUrl>` to our brand new domain.
+Better readme, new repo url, `<PackageProjectUrl>` to our brand-new domain.
+
+## BlazorStatic.Templates and BlazorStaticMinimalBlog Repos
+
+We’ve done some reorganization and created a new repo to house all the templates you can create with `dotnet new`.
+
+Right now, there’s one template: `dotnet new BlazorStaticMinimalBlog`, but more are expected to be added in the future.
+
+Check out the [BlazorStatic.Templates repo](https://github.com/BlazorStatic/BlazorStatic.Templates). It includes a GitHub action:
+[build-github-template.yml](https://github.com/BlazorStatic/BlazorStatic.Templates/blob/7cbf00a5a60bcb7bb2736e886547bf04c68878e5/.github/workflows/build-github-template.yml),
+which installs the `dotnet new` template, runs `dotnet new BlazorStaticMinimalBlog`, and pushes the result to [BlazorStaticMinimalBlog](https://github.com/BlazorStatic/BlazorStaticMinimalBlog)—now a read-only GitHub "green button" template.
+
+This "green button template" provides a two-click way to get a BlazorStatic website running in your own repo, with no additional maintenance required. This allows us to focus entirely on the `dotnet new` template.
+
+![BlazorStatic Template Screenshot](media/release-1.0.0-beta.14/img.png)
+
+As part of this change, the `BlazorStaticMinimalBlog` submodule has been removed from the main repo, and the `BlazorStatic.Templates` repo is no longer part of the main repo either.
+
+There are more updates coming to `BlazorStatic.Templates`.
 
 ## Feedback
 

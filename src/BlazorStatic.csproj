@@ -17,8 +17,8 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="../README.md" Pack="true" PackagePath="/"/> <!--    readme from the repository root--> 
-    <None Include="../BlazorStaticWebsite/wwwroot/imgs/logo.png" Pack="true" PackagePath="/BlazorStaticWebsite/wwwroot/imgs/"/><!--    logo to match what is inside the readme.md--> 
+    <None Include="../README.md" Pack="true" PackagePath="/"/> <!--    readme from the repository root-->
+    <None Include="../BlazorStaticWebsite/wwwroot/imgs/logo.png" Pack="true" PackagePath="/BlazorStaticWebsite/wwwroot/imgs/"/><!--    logo to match what is inside the readme.md-->
   </ItemGroup>
 
   <PropertyGroup>
@@ -26,7 +26,7 @@
     <Product>BlazorStatic</Product>
     <Description>Static site generator for Blazor</Description>
     <PackageId>BlazorStatic</PackageId>
-    <Version Condition="'$(EnvironmentName)' != 'Development'">1.0.0-beta.14</Version>
+    <Version Condition="'$(EnvironmentName)' != 'Development'">1.0.0-beta.15</Version>
     <!--Set EnvironmentName using dotnet build -c Release -p:EnvironmentName=Development for local package build-->
     <Version Condition="'$(EnvironmentName)' == 'Development'">1.0.0-dev.$([System.DateTime]::Now.ToString("yyMMddHHmmss"))</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

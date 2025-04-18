@@ -8,7 +8,7 @@ namespace BlazorStatic.Services;
 /// code is borrowed with some changes from:
 /// https://andrewlock.net/finding-all-routable-components-in-a-webassembly-app/
 /// </summary>
-internal static class RoutesHelper
+public static class RoutesHelper
 {
     /// <summary>
     ///     Gets the static routes of a blazor app
@@ -33,19 +33,12 @@ internal static class RoutesHelper
     ///     Array values can contain null. <br />
     ///     Returns an empty array if the component doesn't have `@page` directive.
     /// </returns>
-    private static string[] GetRoutesFromComponent(Type component)
+    private static IEnumerable<string> GetRoutesFromComponent(Type component)
     {
-        var attributes = component.GetCustomAttributes(typeof(RouteAttribute), inherit: false);
-        var routes = new string[attributes.Length];
-        for(int i = 0; i < attributes.Length; i++)
-        {
-            var attr = (RouteAttribute)attributes[i];
-            // Ignore parameterized routes (e.g /{Id}) because we can't generate them.
-            if(!attr.Template.Contains('{'))
-            {
-                routes[i] = attr.Template;
-            }
-        }
-        return routes;
+        return component
+            .GetCustomAttributes(typeof(RouteAttribute), inherit: false)
+            .Cast<RouteAttribute>()
+            .Where(attr => !attr.Template.Contains('{')) // Ignore parameterized routes (e.g /{Id}) because we can't generate them.
+            .Select(attr => attr.Template);
     }
 }

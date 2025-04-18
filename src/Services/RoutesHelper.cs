@@ -8,7 +8,7 @@ namespace BlazorStatic.Services;
 /// code is borrowed with some changes from:
 /// https://andrewlock.net/finding-all-routable-components-in-a-webassembly-app/
 /// </summary>
-public static class RoutesHelper
+internal static class RoutesHelper
 {
     /// <summary>
     ///     Gets the static routes of a blazor app

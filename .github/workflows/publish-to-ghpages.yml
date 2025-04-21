@@ -30,6 +30,9 @@ jobs:
           cd ${{ env.WEBAPP_PATH }}
           tailwindcss --input ./wwwroot/app.css  --output ./wwwroot/app.min.css  --minify
 
+      - name: Run tests
+        run: dotnet test tests/BlazorStatic.Tests/BlazorStatic.Tests.csproj --configuration Release
+
       - name: Run webapp and generate static files
         run: dotnet run --project ${{ env.WEBAPP_PATH }}/${{env.WEBAPP_CSPROJ}}  --configuration Release
 

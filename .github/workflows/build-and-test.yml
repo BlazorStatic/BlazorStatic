@@ -1,0 +1,37 @@
+
+name: Build and test pipeline
+
+on:
+  push:
+    branches:
+      - '*'
+
+env:
+  WEBAPP_PATH: BlazorStaticWebsite
+  WEBAPP_CSPROJ: BlazorStaticWebsite.csproj
+  ASPNETCORE_ENVIRONMENT: Production
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      webapp-path: ${{ env.WEBAPP_PATH }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Remove launchSettings.json (to not override ASPNETCORE_ENVIRONMENT)
+        run: rm ${{ env.WEBAPP_PATH }}/Properties/launchSettings.json
+      - name: Tailwind - download and run cli
+        run: |
+          wget https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-x64 -O /usr/local/bin/tailwindcss
+          chmod +x /usr/local/bin/tailwindcss
+          cd ${{ env.WEBAPP_PATH }}
+          tailwindcss --input ./wwwroot/app.css  --output ./wwwroot/app.min.css  --minify
+
+      - name: Run tests
+        run: dotnet test tests/BlazorStatic.Tests/BlazorStatic.Tests.csproj --configuration Release
+
+      - name: Run webapp and generate static files
+        run: dotnet run --project ${{ env.WEBAPP_PATH }}/${{env.WEBAPP_CSPROJ}}  --configuration Release

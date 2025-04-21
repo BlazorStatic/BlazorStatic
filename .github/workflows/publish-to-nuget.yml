@@ -22,6 +22,9 @@ jobs:
         with:
           dotnet-version: '9.0.x'
 
+      - name: Run tests
+        run: dotnet test tests/BlazorStatic.Tests/BlazorStatic.Tests.csproj --configuration Release
+
       - name: Run webapp and generate static files
         run: dotnet pack src/BlazorStatic.csproj --configuration Release
 

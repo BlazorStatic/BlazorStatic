@@ -93,7 +93,7 @@ Detailed instructions are [here](./BlazorStaticWebsite/Content/Docs/deployment.m
 | Page about BlazorStatic (this repo contains the code itself) | [source](https://github.com/BlazorStatic/BlazorStatic/tree/master/BlazorStaticWebsite) | [live](https://blazorstatic.github.io/BlazorStatic/)            |
 | Minimal blog                                                 | [source](https://github.com/BlazorStatic/BlazorStaticMinimalBlog)                      | [live](https://blazorstatic.github.io/BlazorStaticMinimalBlog/) |
 | Zodoc - image processing and deep learning sample            | [source](https://github.com/tesar-tech/zodoc/)                                         | [live](https://zodoc.tech/)                                     |
-| Bipin - Personal blog                                                | [source](https://github.com/iAmBipinPaul/bipinpaul.com)                                |[live](https://bipinpaul.com/)|
+| Bipin - Personal blog                                                | [source](https://github.com/iAmBipinPaul/bipinpaul.com)                                | [live](https://bipinpaul.com/)|
 | ❓ Add your page here!!!                                      |                                                                                        |
 
 # 🤝 Contributions

@@ -1,10 +1,10 @@
 
-name: Build, publish to gh pages and nuget
+name: Build and test pipeline
 
 on:
   push:
     branches:
-      - master
+      - '*'
 
 env:
   WEBAPP_PATH: BlazorStaticWebsite
@@ -35,26 +35,3 @@ jobs:
 
       - name: Run webapp and generate static files
         run: dotnet run --project ${{ env.WEBAPP_PATH }}/${{env.WEBAPP_CSPROJ}}  --configuration Release
-
-      - name: Upload webapp output artifacts
-        uses: actions/upload-artifact@v4
-        with:
-            name: static-pages-output
-            path: ${{ env.WEBAPP_PATH }}/output
-
-
-  deploy-to-gh-pages:
-    permissions:
-      contents: write
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: static-pages-output
-          path: output
-      - run: touch output/.nojekyll #folder starting with _ are handled as jekyll. This file will prevent that.
-      - uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: ./output

@@ -13,9 +13,9 @@ namespace BlazorStatic.Services;
 /// <param name="helpers"></param>
 /// <param name="logger"></param>
 public class BlazorStaticService(
-    BlazorStaticOptions options,
-    BlazorStaticHelpers helpers,
-    ILogger<BlazorStaticService> logger)
+BlazorStaticOptions options,
+BlazorStaticHelpers helpers,
+ILogger<BlazorStaticService> logger)
 {
     /// <summary>
     ///     The BlazorStaticOptions used to configure the generation process.
@@ -35,22 +35,22 @@ public class BlazorStaticService(
     /// <param name="appUrl">The base URL of the application, used for making HTTP requests to fetch page content.</param>
     internal async Task GenerateStaticPages(string appUrl)
     {
-        if(options.AddPagesWithoutParameters)
+        if( options.AddPagesWithoutParameters )
         {
             AddPagesWithoutParameters();
         }
 
         foreach(var action in options.GetBeforeFilesGenerationActions())
         {
-            await action.Invoke();
+            await action.Invoke().ConfigureAwait(false);
         }
 
-        if(options.SuppressFileGeneration)
+        if( options.SuppressFileGeneration )
         {
             return;
         }
 
-        if(Directory.Exists(options.OutputFolderPath))//clear output folder
+        if( Directory.Exists(options.OutputFolderPath) ) //clear output folder
         {
             Directory.Delete(options.OutputFolderPath, true);
         }
@@ -58,18 +58,20 @@ public class BlazorStaticService(
         Directory.CreateDirectory(options.OutputFolderPath);
 
         //sitemap generation has to happen before copying the wwwroot files, because it outputs the sitemap there
-        if(Options.ShouldGenerateSitemap)
+        if( Options.ShouldGenerateSitemap )
         {
-            await TryGenerateSitemap();
+            await TryGenerateSitemap().ConfigureAwait(false);
         }
 
-        var ignoredPathsWithOutputFolder = options.IgnoredPathsOnContentCopy.Select(x => Path.Combine(options.OutputFolderPath, x)).ToList();
+        var ignoredPathsWithOutputFolder = options.IgnoredPathsOnContentCopy
+                                                  .Select(x => Path.Combine(options.OutputFolderPath, x)).ToList();
         foreach(var pathToCopy in options.ContentToCopyToOutput)
         {
             logger.LogInformation("Copying {sourcePath} to {targetPath}", pathToCopy.SourcePath,
             Path.Combine(options.OutputFolderPath, pathToCopy.TargetPath));
 
-            helpers.CopyContent(pathToCopy.SourcePath, Path.Combine(options.OutputFolderPath, pathToCopy.TargetPath),
+            helpers.CopyContent(pathToCopy.SourcePath,
+            Path.Combine(options.OutputFolderPath, pathToCopy.TargetPath),
             ignoredPathsWithOutputFolder);
         }
 
@@ -81,11 +83,13 @@ public class BlazorStaticService(
             string content;
             try
             {
-                content = await client.GetStringAsync(page.Url);
+                content = await client.GetStringAsync(page.Url).ConfigureAwait(false);
             }
             catch(HttpRequestException ex)
             {
-                logger.LogWarning("Failed to retrieve page at {pageUrl}. StatusCode:{statusCode}. Error: {exceptionMessage}", page.Url,
+                logger.LogWarning(
+                "Failed to retrieve page at {pageUrl}. StatusCode:{statusCode}. Error: {exceptionMessage}",
+                page.Url,
                 ex.StatusCode, ex.Message);
 
                 continue;
@@ -94,12 +98,12 @@ public class BlazorStaticService(
             var outFilePath = Path.Combine(options.OutputFolderPath, page.OutputFile.TrimStart('/'));
 
             var directoryPath = Path.GetDirectoryName(outFilePath);
-            if(!string.IsNullOrEmpty(directoryPath))
+            if( !string.IsNullOrEmpty(directoryPath) )
             {
                 Directory.CreateDirectory(directoryPath);
             }
 
-            await File.WriteAllTextAsync(outFilePath, content);
+            await File.WriteAllTextAsync(outFilePath, content).ConfigureAwait(false);
         }
     }
 
@@ -108,12 +112,12 @@ public class BlazorStaticService(
     ///     !requires BlazorStaticOptions.SiteUrl to not be null!
     ///     Otherwise, returns with warning
     /// </summary>
-    private async Task TryGenerateSitemap()
+    async Task TryGenerateSitemap()
     {
-        if(string.IsNullOrWhiteSpace(Options.SiteUrl))
+        if( string.IsNullOrWhiteSpace(Options.SiteUrl) )
         {
-            logger.LogWarning("'BlazorStaticOptions.SiteUrl' is null or empty! Can't generate Sitemap." +
-            " Either provide the site url or set 'BlazorStaticOptions.ShouldGenerateSitemap' to false");
+            logger.LogWarning("'BlazorStaticOptions.SiteUrl' is null or empty! Can't generate Sitemap."
+                              + " Either provide the site url or set 'BlazorStaticOptions.ShouldGenerateSitemap' to false");
 
             return;
         }
@@ -124,10 +128,10 @@ public class BlazorStaticService(
         foreach(var page in options.PagesToGenerate)
         {
             var pageUrl = Options.SiteUrl.TrimEnd('/') + EncodeUrl(page.Url);
-            List<XElement> xElements = [new(xmlns + "loc", pageUrl)];
+            List<XElement> xElements = [new( xmlns + "loc", pageUrl )];
 
             // only add a <lastmod> node if the file is a post
-            if(page.AdditionalInfo?.LastMod != null)
+            if( page.AdditionalInfo?.LastMod != null )
             {
                 xElements.Add(new XElement(xmlns + "lastmod", $"{page.AdditionalInfo.LastMod:yyyy-MM-dd}"));
             }
@@ -142,15 +146,17 @@ public class BlazorStaticService(
 
         const string sitemapFileName = "sitemap.xml";
         var sitemapPath = Path.Combine(options.SitemapOutputFolderPath, sitemapFileName);
-        await File.WriteAllTextAsync(sitemapPath, xDocument.Declaration + xDocument.ToString());
+        await File.WriteAllTextAsync(sitemapPath, xDocument.Declaration + xDocument.ToString())
+                  .ConfigureAwait(false);
         logger.LogInformation("Sitemap generated into {pageOutputFile}", sitemapPath);
-        options.ContentToCopyToOutput.Add(new ContentToCopy(sitemapPath, sitemapFileName));//it is not copied with wwwroot as
+        options.ContentToCopyToOutput.Add(new ContentToCopy(sitemapPath,
+        sitemapFileName)); //it is not copied with wwwroot as
         return;
 
         static string EncodeUrl(string url)
         {
             var encodedUrl = HttpUtility.UrlEncode(url, Encoding.UTF8).Replace("%2f", "/");
-            return encodedUrl.StartsWith('/') ? encodedUrl : '/' + encodedUrl;
+            return encodedUrl.StartsWith('/')? encodedUrl: '/' + encodedUrl;
         }
     }
 
@@ -158,7 +164,7 @@ public class BlazorStaticService(
     ///     Registers razor pages that have no parameters to be generated as static pages.
     ///     Page is defined by Route parameter: either `@page "Example"` or `@attribute [Route("Example")]`
     /// </summary>
-    private void AddPagesWithoutParameters()
+    void AddPagesWithoutParameters()
     {
         var entryAssembly = Assembly.GetEntryAssembly()!;
         var routesToGenerate = RoutesHelper.GetRoutesToRender(entryAssembly);

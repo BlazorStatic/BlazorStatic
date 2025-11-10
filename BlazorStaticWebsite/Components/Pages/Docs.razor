@@ -3,7 +3,7 @@
 @using BlazorStatic
 @inject BlazorStaticHelpers blazorStaticHelpers
 
-@if (htmlContent is null)
+@if ( htmlContent is null )
 {
     return;
 }
@@ -19,11 +19,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        string file = $"Content/Docs/{(string.IsNullOrWhiteSpace(FileName) ? "README" : FileName)}.md";
-        if (file.EndsWith(".md.md"))
+        string file = $"Content/Docs/{(string.IsNullOrWhiteSpace(FileName)? "README": FileName)}.md";
+        if ( file.EndsWith(".md.md") )
             file = file[..^3];
 
-        htmlContent = await blazorStaticHelpers.ParseMarkdownFile(file, ("media", "Content/Docs/media"));
+        htmlContent = await blazorStaticHelpers.ParseMarkdownFile(file, "Content/Docs/media");
     }
 
 }

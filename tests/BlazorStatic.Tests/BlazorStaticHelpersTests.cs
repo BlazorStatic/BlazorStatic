@@ -7,8 +7,8 @@ namespace BlazorStatic.Tests;
 
 public class BlazorStaticHelpersTests
 {
-    private readonly BlazorStaticHelpers _blazorStaticHelpers;
-    private readonly Mock<ILogger<BlazorStaticHelpers>> _mockLogger;
+    readonly BlazorStaticHelpers _blazorStaticHelpers;
+    readonly Mock<ILogger<BlazorStaticHelpers>> _mockLogger;
 
     public BlazorStaticHelpersTests()
     {
@@ -20,53 +20,83 @@ public class BlazorStaticHelpersTests
     [Fact]
     public async Task ParseMarkdownFile_WithMediaPaths_ReturnCorrectHtmlAndFrontMatterObject()
     {
-        // Arrange
-        string fakeFilePath = "test.md";
-        string mediaFolder = "MediaFolder/somewhere";
-        string imageName = "test.png";
-        string fakeMarkdownContent = $"""
-                                      ---
-                                      title: Test Post
-                                      ---
-                                      ## Hello Markdown
-
-                                      ![image]({mediaFolder}/{imageName})
-                                      """;
-        string replace = $"_Content/{mediaFolder}";
-        var mediaPaths = (mediaFolder, replace);
-
-        // Mock file content (you may need to mock external file reading or use dependency injection for a file provider)
-        await File.WriteAllTextAsync(fakeFilePath, fakeMarkdownContent);
-
+        var contentPath = "Content/Blog";
+        var fileAbsolutePath = Path.GetFullPath(Path.Combine(contentPath, "test1.md"));
         // Act
-        var (htmlContent, frontMatter) = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fakeFilePath, mediaPaths);
-        var (htmlContent2, frontMatter2) = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fakeFilePath);
+        var res = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fileAbsolutePath, contentPath);
 
         // Assert
         Assert.Contains(
             """
             <h2 id="hello-markdown">Hello Markdown</h2>
             """,
-            htmlContent
+            res.HtmlContent
         );
 
-        Assert.Contains($"{replace}/{imageName}", htmlContent);
-        Assert.Equal("Test Post", frontMatter.Title);
+        // md image
+        Assert.Contains(Path.Combine(contentPath, "media/test.png"), res.HtmlContent);
 
-        //Assert for content2
+        // hlml image
+        Assert.Contains(
+            $"""
+             <img src="{Path.Combine(contentPath, "media/test.png")}" alt="something"/>
+             """,
+            res.HtmlContent
+        );
+        // doesnt care about external images
+        Assert.Contains(
+            $"""
+             <img src="https://blazorstatic.net/img.png" alt="something"/>
+             """,
+            res.HtmlContent
+        );
+        Assert.Equal("Test Post", res.FrontMatter.Title);
+    }
+
+    [Fact]
+    public async Task ParseMarkdownFile_LogsWarningOnNonExistingImage()
+    {
+        var contentPath = Path.GetFullPath("Content/Blog");
+        var fileAbsolutePath = Path.GetFullPath(Path.Combine(contentPath, "test2.md"));
+
+        // Act
+        var res = await _blazorStaticHelpers
+                  .ParseMarkdownFile<TestFrontMatter>(fileAbsolutePath, contentPath);
+
+        // Assert: existing assertion
+        Assert.Equal("Test Post", res.FrontMatter.Title);
+
+        // Assert: warning was logged once
+        _mockLogger.Verify(
+            logger => logger.Log(
+                LogLevel.Warning,
+                It.IsAny<EventId>(),
+                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Image file not found")),
+                null,
+                (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task ParseMarkdownFile_WithMediaPathsInPostsInSeparateFolders_ReturnCorrectHtmlAndFrontMatterObject()
+    {
+        // Act
+        var contentPath = "Content/Blog2";
+        string folderForPost = "folder-for-post";
+        var fileAbsolutePath = Path.GetFullPath(Path.Combine(contentPath, folderForPost, "index.md"));
+        // Act
+        var res = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fileAbsolutePath, contentPath);
+
+        // Assert
         Assert.Contains(
             """
             <h2 id="hello-markdown">Hello Markdown</h2>
             """,
-            htmlContent2
+            res.HtmlContent
         );
 
-        Assert.Contains($"{mediaFolder}/{imageName}", htmlContent2);
-        Assert.Equal("Test Post", frontMatter2.Title);
-
-
-        // Cleanup
-        File.Delete(fakeFilePath);
+        Assert.Contains($""" src="{Path.Combine(contentPath, folderForPost, "media/test.png")}" """, res.HtmlContent);
+        Assert.Equal("Test Post", res.FrontMatter.Title);
     }
 
     [Fact]
@@ -118,17 +148,17 @@ public class BlazorStaticHelpersTests
         await File.WriteAllTextAsync(filePath, markdownContent);
 
         // Act
-        var (htmlContent, frontMatter) =
+        var res =
         await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(filePath, yamlDeserializer: customYamlDeserializer);
 
         // Assert
-        Assert.NotNull(htmlContent);
-        Assert.Contains("<h2 id=\"pascal-case-example\">Pascal Case Example</h2>", htmlContent);// Confirms Markdown converted to HTML
+        Assert.NotNull(res.HtmlContent);
+        Assert.Contains("<h2 id=\"pascal-case-example\">Pascal Case Example</h2>", res.HtmlContent);// Confirms Markdown converted to HTML
 
-        Assert.NotNull(frontMatter);// Ensure YAML was deserialized
-        Assert.Equal("Pascal Case Test", frontMatter.Title);// Verify PascalCase key "Title" is parsed
-        Assert.Equal("Test YAML with PascalCase naming convention", frontMatter.Description);// Verify PascalCase key "Description"
-        Assert.True(frontMatter.IsDraft);// Verify PascalCase key "IsDraft"
+        Assert.NotNull(res.FrontMatter);// Ensure YAML was deserialized
+        Assert.Equal("Pascal Case Test", res.FrontMatter.Title);// Verify PascalCase key "Title" is parsed
+        Assert.Equal("Test YAML with PascalCase naming convention", res.FrontMatter.Description);// Verify PascalCase key "Description"
+        Assert.True(res.FrontMatter.IsDraft);// Verify PascalCase key "IsDraft"
 
         // Cleanup
         File.Delete(filePath);
@@ -143,8 +173,8 @@ public class BlazorStaticHelpersTests
 
         var ignoredPaths = new List<string>
                            {
-                           "ignoredDir",// Whole directory should be ignored
-                           "dirWithIgnoredFile/ignoredFile.txt"// Specific file in a non-ignored dir
+                               "ignoredDir",// Whole directory should be ignored
+                               "dirWithIgnoredFile/ignoredFile.txt"// Specific file in a non-ignored dir
                            };
 
         CreateTestSourceStructure(sourcePath);
@@ -289,23 +319,23 @@ public class BlazorStaticHelpersTests
         // Arrange
         string fakeFilePath = "test-no-yaml.md";
         string fakeMarkdownContent = """
-                                  ## Example Markdown without Front Matter
-                                  This file has no YAML front matter.
-                                  """;
+                                     ## Example Markdown without Front Matter
+                                     This file has no YAML front matter.
+                                     """;
 
         // Write the fake Markdown file
         await File.WriteAllTextAsync(fakeFilePath, fakeMarkdownContent);
 
         // Act
-        var (htmlContent, frontMatter) = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fakeFilePath);
+        var res = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fakeFilePath);
 
         try
         {
             // Assert: Verify the content was parsed correctly
-            Assert.NotNull(htmlContent); // Content should still parse to HTML
-            Assert.Contains("<h2 id=\"example-markdown-without-front-matter\">Example Markdown without Front Matter</h2>", htmlContent);
-            Assert.NotNull(frontMatter); // A default front matter object should be created
-            Assert.IsType<TestFrontMatter>(frontMatter);
+            Assert.NotNull(res.HtmlContent);// Content should still parse to HTML
+            Assert.Contains("<h2 id=\"example-markdown-without-front-matter\">Example Markdown without Front Matter</h2>", res.HtmlContent);
+            Assert.NotNull(res.FrontMatter);// A default front matter object should be created
+            Assert.IsType<TestFrontMatter>(res.FrontMatter);
 
             // Verify that a warning log was triggered for the missing YAML front matter
             _mockLogger.Verify(logger =>
@@ -316,75 +346,73 @@ public class BlazorStaticHelpersTests
                         v.ToString().Contains("No YAML front matter found in") && v.ToString().Contains(fakeFilePath)),
                     null,
                     (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-            Times.Once
-        );
-    }
+                Times.Once
+            );
+        }
         finally
         {
             // Cleanup
-            if (File.Exists(fakeFilePath))
+            if( File.Exists(fakeFilePath) )
             {
                 File.Delete(fakeFilePath);
             }
         }
-}
-
-[Fact]
-public async Task ParseMarkdownFile_WithInvalidYaml_LogsWarningAndReturnsDefault()
-{
-    // Arrange
-    string fakeFilePath = "test-invalid-yaml.md";
-    string markdownContentWithInvalidYaml = $"""
-                                              ---
-                                              title: :::: Invalid YAML here ::::
-                                              ---
-                                              ## Example Markdown
-                                              This content is valid Markdown.
-                                              """;
-
-    // Write the invalid Markdown content to a file
-    await File.WriteAllTextAsync(fakeFilePath, markdownContentWithInvalidYaml);
-
-    // Act
-    var (htmlContent, frontMatter) = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fakeFilePath);
-
-    try
-    {
-        // Assert: Ensure a warning log is triggered for YAML deserialization failure
-        _mockLogger.Verify(
-            logger => logger.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) =>
-                    v.ToString().Contains("Cannot deserialize YAML front matter in") &&
-                    v.ToString().Contains(fakeFilePath) &&
-                    v.ToString().Contains("Error:")),
-                null,
-                (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-            Times.Once
-        );
-
-        // Assert: Ensure the HTML content was parsed correctly
-        Assert.NotNull(htmlContent);
-        Assert.Contains("<h2 id=\"example-markdown\">Example Markdown</h2>", htmlContent);
-        Assert.Contains("This content is valid Markdown.", htmlContent);
-
-        // Assert: Ensure the front matter defaults to a new instance of TestFrontMatter
-        Assert.NotNull(frontMatter);
-        Assert.IsType<TestFrontMatter>(frontMatter);
     }
-    finally
+
+    [Fact]
+    public async Task ParseMarkdownFile_WithInvalidYaml_LogsWarningAndReturnsDefault()
     {
-        // Cleanup: Delete the test Markdown file
-        if (File.Exists(fakeFilePath))
+        // Arrange
+        string fakeFilePath = "test-invalid-yaml.md";
+        string markdownContentWithInvalidYaml = $"""
+                                                 ---
+                                                 title: :::: Invalid YAML here ::::
+                                                 ---
+                                                 ## Example Markdown
+                                                 This content is valid Markdown.
+                                                 """;
+
+        // Write the invalid Markdown content to a file
+        await File.WriteAllTextAsync(fakeFilePath, markdownContentWithInvalidYaml);
+
+        // Act
+        var res = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fakeFilePath);
+
+        try
         {
-            File.Delete(fakeFilePath);
+            // Assert: Ensure a warning log is triggered for YAML deserialization failure
+            _mockLogger.Verify(
+                logger => logger.Log(
+                    LogLevel.Warning,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, t) =>
+                        v.ToString().Contains("Cannot deserialize YAML front matter in") && v.ToString().Contains(fakeFilePath) && v.ToString().Contains("Error:")),
+                    null,
+                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+                Times.Once
+            );
+
+            // Assert: Ensure the HTML content was parsed correctly
+            Assert.NotNull(res.HtmlContent);
+            Assert.Contains("<h2 id=\"example-markdown\">Example Markdown</h2>", res.HtmlContent);
+            Assert.Contains("This content is valid Markdown.", res.HtmlContent);
+
+            // Assert: Ensure the front matter defaults to a new instance of TestFrontMatter
+            Assert.NotNull(res.FrontMatter);
+            Assert.IsType<TestFrontMatter>(res.FrontMatter);
+        }
+        finally
+        {
+            // Cleanup: Delete the test Markdown file
+            if( File.Exists(fakeFilePath) )
+            {
+                File.Delete(fakeFilePath);
+            }
         }
     }
-}
 
 
-    private static void CreateTestSourceStructure(string sourcePath)
+    static void CreateTestSourceStructure(string sourcePath)
     {
         // Clean up if the directory already exists
         if( Directory.Exists(sourcePath) )
@@ -402,8 +430,6 @@ public async Task ParseMarkdownFile_WithInvalidYaml_LogsWarningAndReturnsDefault
         File.WriteAllText(Path.Combine(sourcePath, "dirWithIgnoredFile", "ignoredFile.txt"), "This file is specifically ignored");
         File.WriteAllText(Path.Combine(sourcePath, "dirWithIgnoredFile", "fileNotIgnored.txt"), "This file is not ignored");
     }
-
-
 }
 
 // Example implementation of IFrontMatter

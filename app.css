@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+
+@theme {
+    /* Custom font */
+    --font-tomorrow: "Tomorrow", "sans";
+
+    /* Custom vidaloca color palette */
+    --color-vidaloca-50: #f4f9ec;
+    --color-vidaloca-100: #e7f2d5;
+    --color-vidaloca-200: #d0e7af;
+    --color-vidaloca-300: #b1d680;
+    --color-vidaloca-400: #95c358;
+    --color-vidaloca-500: #76a83a;
+    --color-vidaloca-600: #62902e;
+    --color-vidaloca-700: #466625;
+    --color-vidaloca-800: #3a5222;
+    --color-vidaloca-900: #334720;
+    --color-vidaloca-950: #19260d;
+
+    /* Set primary colors to vidaloca */
+    --color-primary-50: var(--color-vidaloca-50);
+    --color-primary-100: var(--color-vidaloca-100);
+    --color-primary-200: var(--color-vidaloca-200);
+    --color-primary-300: var(--color-vidaloca-300);
+    --color-primary-400: var(--color-vidaloca-400);
+    --color-primary-500: var(--color-vidaloca-500);
+    --color-primary-600: var(--color-vidaloca-600);
+    --color-primary-700: var(--color-vidaloca-700);
+    --color-primary-800: var(--color-vidaloca-800);
+    --color-primary-900: var(--color-vidaloca-900);
+    --color-primary-950: var(--color-vidaloca-950);
+}
+
+
+@utility prose {
+    @apply max-w-none;
+
+    h1 {
+        @apply text-vidaloca-600;
+    }
+    h2 {
+        @apply text-vidaloca-400;
+    }
+    h3 {
+        @apply text-vidaloca-300;
+    }
+    h4 {
+        @apply text-vidaloca-400;
+    }
+    code {
+        @apply text-violet-700;
+    }
+}

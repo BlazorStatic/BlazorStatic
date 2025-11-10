@@ -36,16 +36,7 @@
     <loc>https://blazorstatic.net/tags</loc>
   </url>
   <url>
-    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.14</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.15</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.7</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/blog/first-release</loc>
+    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.4</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.11</loc>
@@ -54,52 +45,31 @@
     <loc>https://blazorstatic.net/blog/the-origins-of-blazorstatic</loc>
   </url>
   <url>
-    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.13</loc>
+    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.7</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.10</loc>
   </url>
   <url>
-    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.4</loc>
+    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.13</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.9</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.15</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.14</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/blog/first-release</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/blog/subfolder/post-in-subfolder</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/tags/release</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/tag%2bencoder</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/blazorstatic.net</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/BlazorStatic%2borganization</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/multiple%2bcontents</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/hot%2breload</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/story</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/HotReload</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/dotnet%2bnew%2btemplate</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/sitemap.xml</loc>
-  </url>
-  <url>
-    <loc>https://blazorstatic.net/tags/razor-pages</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/tags/static-web-assets</loc>
@@ -117,6 +87,36 @@
     <loc>https://blazorstatic.net/tags/ignoring%2bfiles</loc>
   </url>
   <url>
+    <loc>https://blazorstatic.net/tags/hot%2breload</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/story</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/multiple%2bcontents</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/sitemap.xml</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/razor-pages</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/HotReload</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/dotnet%2bnew%2btemplate</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/tag%2bencoder</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/blazorstatic.net</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/tags/BlazorStatic%2borganization</loc>
+  </url>
+  <url>
     <loc>https://blazorstatic.net/tags/test</loc>
   </url>
   <url>
@@ -132,12 +132,12 @@
     <loc>https://blazorstatic.net/tags/.net%252FC%2523</loc>
   </url>
   <url>
-    <loc>https://blazorstatic.net/projects/project2</loc>
-  </url>
-  <url>
     <loc>https://blazorstatic.net/projects/README</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/projects/project1</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/projects/project2</loc>
   </url>
 </urlset>

@@ -8,9 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Markdig" Version="0.39.1" />
+    <PackageReference Include="Markdig" Version="0.39.1"/>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
-    <PackageReference Include="YamlDotNet" Version="16.3.0" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
     <Product>BlazorStatic</Product>
     <Description>Static site generator for Blazor</Description>
     <PackageId>BlazorStatic</PackageId>
-    <Version Condition="'$(EnvironmentName)' != 'Development'">1.0.0-beta.15</Version>
+    <Version Condition="'$(EnvironmentName)' != 'Development'">1.0.0-beta.16</Version>
     <!--Set EnvironmentName using dotnet build -c Release -p:EnvironmentName=Development for local package build-->
     <Version Condition="'$(EnvironmentName)' == 'Development'">1.0.0-dev.$([System.DateTime]::Now.ToString("yyMMddHHmmss"))</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>

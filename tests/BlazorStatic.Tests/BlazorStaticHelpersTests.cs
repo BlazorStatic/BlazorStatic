@@ -27,10 +27,10 @@ public class BlazorStaticHelpersTests
 
         // Assert
         Assert.Contains(
-            """
-            <h2 id="hello-markdown">Hello Markdown</h2>
-            """,
-            res.HtmlContent
+        """
+        <h2 id="hello-markdown">Hello Markdown</h2>
+        """,
+        res.HtmlContent
         );
 
         // md image
@@ -38,17 +38,17 @@ public class BlazorStaticHelpersTests
 
         // hlml image
         Assert.Contains(
-            $"""
-             <img src="{Path.Combine(contentPath, "media/test.png")}" alt="something"/>
-             """,
-            res.HtmlContent
+        $"""
+         <img src="{Path.Combine(contentPath, "media/test.png")}" alt="something"/>
+         """,
+        res.HtmlContent
         );
         // doesnt care about external images
         Assert.Contains(
-            $"""
-             <img src="https://blazorstatic.net/img.png" alt="something"/>
-             """,
-            res.HtmlContent
+        $"""
+         <img src="https://blazorstatic.net/img.png" alt="something"/>
+         """,
+        res.HtmlContent
         );
         Assert.Equal("Test Post", res.FrontMatter.Title);
     }
@@ -68,17 +68,18 @@ public class BlazorStaticHelpersTests
 
         // Assert: warning was logged once
         _mockLogger.Verify(
-            logger => logger.Log(
-                LogLevel.Warning,
-                It.IsAny<EventId>(),
-                It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Image file not found")),
-                null,
-                (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-            Times.Once);
+        logger => logger.Log(
+        LogLevel.Warning,
+        It.IsAny<EventId>(),
+        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Image file not found")),
+        null,
+        (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+        Times.Once);
     }
 
     [Fact]
-    public async Task ParseMarkdownFile_WithMediaPathsInPostsInSeparateFolders_ReturnCorrectHtmlAndFrontMatterObject()
+    public async Task
+    ParseMarkdownFile_WithMediaPathsInPostsInSeparateFolders_ReturnCorrectHtmlAndFrontMatterObject()
     {
         // Act
         var contentPath = "Content/Blog2";
@@ -89,13 +90,14 @@ public class BlazorStaticHelpersTests
 
         // Assert
         Assert.Contains(
-            """
-            <h2 id="hello-markdown">Hello Markdown</h2>
-            """,
-            res.HtmlContent
+        """
+        <h2 id="hello-markdown">Hello Markdown</h2>
+        """,
+        res.HtmlContent
         );
 
-        Assert.Contains($""" src="{Path.Combine(contentPath, folderForPost, "media/test.png")}" """, res.HtmlContent);
+        Assert.Contains($""" src="{Path.Combine(contentPath, folderForPost, "media/test.png")}" """,
+        res.HtmlContent);
         Assert.Equal("Test Post", res.FrontMatter.Title);
     }
 
@@ -117,8 +119,9 @@ public class BlazorStaticHelpersTests
         string htmlContent = await _blazorStaticHelpers.ParseMarkdownFile(fakeFilePath);
 
         // Assert
-        Assert.Contains("<h2 id=\"example-markdown-with-image\">Example Markdown with Image</h2>", htmlContent);// Markdown converted
-        Assert.Contains("media/sample.jpg", htmlContent);// The media path should remain unchanged
+        Assert.Contains("<h2 id=\"example-markdown-with-image\">Example Markdown with Image</h2>",
+        htmlContent); // Markdown converted
+        Assert.Contains("media/sample.jpg", htmlContent); // The media path should remain unchanged
 
         // Cleanup
         File.Delete(fakeFilePath);
@@ -149,16 +152,19 @@ public class BlazorStaticHelpersTests
 
         // Act
         var res =
-        await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(filePath, yamlDeserializer: customYamlDeserializer);
+        await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(filePath,
+        yamlDeserializer: customYamlDeserializer);
 
         // Assert
         Assert.NotNull(res.HtmlContent);
-        Assert.Contains("<h2 id=\"pascal-case-example\">Pascal Case Example</h2>", res.HtmlContent);// Confirms Markdown converted to HTML
+        Assert.Contains("<h2 id=\"pascal-case-example\">Pascal Case Example</h2>",
+        res.HtmlContent); // Confirms Markdown converted to HTML
 
-        Assert.NotNull(res.FrontMatter);// Ensure YAML was deserialized
-        Assert.Equal("Pascal Case Test", res.FrontMatter.Title);// Verify PascalCase key "Title" is parsed
-        Assert.Equal("Test YAML with PascalCase naming convention", res.FrontMatter.Description);// Verify PascalCase key "Description"
-        Assert.True(res.FrontMatter.IsDraft);// Verify PascalCase key "IsDraft"
+        Assert.NotNull(res.FrontMatter); // Ensure YAML was deserialized
+        Assert.Equal("Pascal Case Test", res.FrontMatter.Title); // Verify PascalCase key "Title" is parsed
+        Assert.Equal("Test YAML with PascalCase naming convention",
+        res.FrontMatter.Description); // Verify PascalCase key "Description"
+        Assert.True(res.FrontMatter.IsDraft); // Verify PascalCase key "IsDraft"
 
         // Cleanup
         File.Delete(filePath);
@@ -173,36 +179,42 @@ public class BlazorStaticHelpersTests
 
         var ignoredPaths = new List<string>
                            {
-                               "ignoredDir",// Whole directory should be ignored
-                               "dirWithIgnoredFile/ignoredFile.txt"// Specific file in a non-ignored dir
+                               "ignoredDir", // Whole directory should be ignored
+                               "dirWithIgnoredFile/ignoredFile.txt" // Specific file in a non-ignored dir
                            };
 
         CreateTestSourceStructure(sourcePath);
 
         // Act: Call CopyContent
         _blazorStaticHelpers.CopyContent(
-            sourcePath,
-            targetFolder,
-            ignoredPaths.ConvertAll(path => Path.Combine(targetFolder, path))
+        sourcePath,
+        targetFolder,
+        ignoredPaths.ConvertAll(path => Path.Combine(targetFolder, path))
         );
 
         try
         {
             // Assert: Check if files and folders are correctly copied or ignored
             // File in an ignored directory should not exist
-            Assert.False(Directory.Exists(Path.Combine(targetFolder, "ignoredDir")), "Ignored directory should not exist");
-            Assert.False(File.Exists(Path.Combine(targetFolder, "ignoredDir", "fileInIgnoredDir.txt")), "File in ignored directory should not exist");
+            Assert.False(Directory.Exists(Path.Combine(targetFolder, "ignoredDir")),
+            "Ignored directory should not exist");
+            Assert.False(File.Exists(Path.Combine(targetFolder, "ignoredDir", "fileInIgnoredDir.txt")),
+            "File in ignored directory should not exist");
 
             // File in a non-ignored directory should exist
             Assert.True(Directory.Exists(Path.Combine(targetFolder, "normalDir")), "Normal directory should exist");
-            Assert.True(File.Exists(Path.Combine(targetFolder, "normalDir", "fileInNormalDir.txt")), "File in normal directory should exist");
+            Assert.True(File.Exists(Path.Combine(targetFolder, "normalDir", "fileInNormalDir.txt")),
+            "File in normal directory should exist");
 
             // File that is specifically ignored should not exist
-            Assert.True(Directory.Exists(Path.Combine(targetFolder, "dirWithIgnoredFile")), "Directory containing ignored file should exist");
-            Assert.False(File.Exists(Path.Combine(targetFolder, "dirWithIgnoredFile", "ignoredFile.txt")), "Specifically ignored file should not exist");
+            Assert.True(Directory.Exists(Path.Combine(targetFolder, "dirWithIgnoredFile")),
+            "Directory containing ignored file should exist");
+            Assert.False(File.Exists(Path.Combine(targetFolder, "dirWithIgnoredFile", "ignoredFile.txt")),
+            "Specifically ignored file should not exist");
 
             // File not ignored in the same directory should exist
-            Assert.True(File.Exists(Path.Combine(targetFolder, "dirWithIgnoredFile", "fileNotIgnored.txt")), "Non-ignored file should exist");
+            Assert.True(File.Exists(Path.Combine(targetFolder, "dirWithIgnoredFile", "fileNotIgnored.txt")),
+            "Non-ignored file should exist");
         }
         finally
         {
@@ -254,17 +266,18 @@ public class BlazorStaticHelpersTests
         try
         {
             // Assert: Target folder should not be created
-            Assert.False(Directory.Exists(targetPath), "Target directory should not exist if source path does not exist.");
+            Assert.False(Directory.Exists(targetPath),
+            "Target directory should not exist if source path does not exist.");
 
             // Verify that an error was logged
             _mockLogger.Verify(
-                logger => logger.Log(
-                    LogLevel.Error,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("does not exist")),
-                    null,
-                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()
-                ), Times.Once);
+            logger => logger.Log(
+            LogLevel.Error,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("does not exist")),
+            null,
+            (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()
+            ), Times.Once);
         }
         finally
         {
@@ -281,7 +294,7 @@ public class BlazorStaticHelpersTests
     {
         // Arrange
         var sourceFilePath = Path.Combine(Path.GetTempPath(), "someFile.txt");
-        string? targetPath = null;// This will ensure Path.GetDirectoryName returns null
+        string? targetPath = null; // This will ensure Path.GetDirectoryName returns null
 
         // Create a file at the source path
         File.WriteAllText(sourceFilePath, "This is a test file.");
@@ -293,14 +306,14 @@ public class BlazorStaticHelpersTests
         {
             // Assert: Verify that an error was logged
             _mockLogger.Verify(logger =>
-                logger.Log(
-                    LogLevel.Error,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) =>
-                        v.ToString().Contains($"Target directory path is null for file: {sourceFilePath}")),
-                    null,
-                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-                Times.Once
+            logger.Log(
+            LogLevel.Error,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) =>
+            v.ToString().Contains($"Target directory path is null for the file: {sourceFilePath}")),
+            null,
+            (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+            Times.Once
             );
         }
         finally
@@ -332,21 +345,23 @@ public class BlazorStaticHelpersTests
         try
         {
             // Assert: Verify the content was parsed correctly
-            Assert.NotNull(res.HtmlContent);// Content should still parse to HTML
-            Assert.Contains("<h2 id=\"example-markdown-without-front-matter\">Example Markdown without Front Matter</h2>", res.HtmlContent);
-            Assert.NotNull(res.FrontMatter);// A default front matter object should be created
+            Assert.NotNull(res.HtmlContent); // Content should still parse to HTML
+            Assert.Contains(
+            "<h2 id=\"example-markdown-without-front-matter\">Example Markdown without Front Matter</h2>",
+            res.HtmlContent);
+            Assert.NotNull(res.FrontMatter); // A default front matter object should be created
             Assert.IsType<TestFrontMatter>(res.FrontMatter);
 
             // Verify that a warning log was triggered for the missing YAML front matter
             _mockLogger.Verify(logger =>
-                logger.Log(
-                    LogLevel.Warning,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) =>
-                        v.ToString().Contains("No YAML front matter found in") && v.ToString().Contains(fakeFilePath)),
-                    null,
-                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-                Times.Once
+            logger.Log(
+            LogLevel.Warning,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) =>
+            v.ToString().Contains("No YAML front matter found in") && v.ToString().Contains(fakeFilePath)),
+            null,
+            (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+            Times.Once
             );
         }
         finally
@@ -382,14 +397,16 @@ public class BlazorStaticHelpersTests
         {
             // Assert: Ensure a warning log is triggered for YAML deserialization failure
             _mockLogger.Verify(
-                logger => logger.Log(
-                    LogLevel.Warning,
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) =>
-                        v.ToString().Contains("Cannot deserialize YAML front matter in") && v.ToString().Contains(fakeFilePath) && v.ToString().Contains("Error:")),
-                    null,
-                    (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
-                Times.Once
+            logger => logger.Log(
+            LogLevel.Warning,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) =>
+            v.ToString().Contains("Cannot deserialize YAML front matter in")
+            && v.ToString().Contains(fakeFilePath)
+            && v.ToString().Contains("Error:")),
+            null,
+            (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
+            Times.Once
             );
 
             // Assert: Ensure the HTML content was parsed correctly
@@ -425,10 +442,14 @@ public class BlazorStaticHelpersTests
         Directory.CreateDirectory(Path.Combine(sourcePath, "dirWithIgnoredFile"));
 
         // Add files
-        File.WriteAllText(Path.Combine(sourcePath, "ignoredDir", "fileInIgnoredDir.txt"), "This file is in an ignored directory");
-        File.WriteAllText(Path.Combine(sourcePath, "normalDir", "fileInNormalDir.txt"), "This file is in a normal directory");
-        File.WriteAllText(Path.Combine(sourcePath, "dirWithIgnoredFile", "ignoredFile.txt"), "This file is specifically ignored");
-        File.WriteAllText(Path.Combine(sourcePath, "dirWithIgnoredFile", "fileNotIgnored.txt"), "This file is not ignored");
+        File.WriteAllText(Path.Combine(sourcePath, "ignoredDir", "fileInIgnoredDir.txt"),
+        "This file is in an ignored directory");
+        File.WriteAllText(Path.Combine(sourcePath, "normalDir", "fileInNormalDir.txt"),
+        "This file is in a normal directory");
+        File.WriteAllText(Path.Combine(sourcePath, "dirWithIgnoredFile", "ignoredFile.txt"),
+        "This file is specifically ignored");
+        File.WriteAllText(Path.Combine(sourcePath, "dirWithIgnoredFile", "fileNotIgnored.txt"),
+        "This file is not ignored");
     }
 }
 

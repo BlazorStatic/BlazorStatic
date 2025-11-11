@@ -9,6 +9,13 @@ authors:
       xUserName: "tesar-tech"
 ---
 
+## Breaking Changes
+
+If your blog posts are in subfolders and use media paths that are **not relative to the file**, be aware that this might break.
+
+The good news? Relative paths are now resolved correctly.\
+So if your IDE displays images properly when working with markdown files, you can be confident that **BlazorStatic** will do the same.
+
 ## Posts in folders
 
 I often start a new blog post by creating a Markdown file that includes a publish date in the front matter.\
@@ -54,7 +61,7 @@ The new "islands of content" approach does require _more content_ in the sense t
 But surprisingly, I find it nicer to work with.
 There's better separation of concerns: each post is self-contained, and nothing is scattered across unrelated folders.
 
-But in the end — it's your choice now. And it’s done without introducing any breaking changes.
+But in the end — it's your choice now.
 
 ## Auto Image Resolver
 

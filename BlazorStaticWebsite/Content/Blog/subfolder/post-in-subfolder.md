@@ -1,4 +1,4 @@
-﻿---
+---
 title: Test post for subfolder
 lead: Just testing if post in subfolder works
 published: 2024-05-29
@@ -13,4 +13,4 @@ Yes, it **works**!
 
 And also an image from subfolder:
 
-![Test image](media/subfolder-for-media/image-in-subfolder.webp)
+![Test image](../media/subfolder-for-media/image-in-subfolder.webp)

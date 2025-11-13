@@ -12,11 +12,13 @@ using Services;
 /// </summary>
 public class BlazorStaticOptions
 {
-    private readonly List<Func<Task>> _beforeFilesGenerationActions = [];
+    readonly List<Func<Task>> _beforeFilesGenerationActions = [];
+
     /// <summary>
     ///     Output folder for generated files. Relative to the project root.
     /// </summary>
     public string OutputFolderPath { get; set; } = "output";
+
     /// <summary>
     ///     Allows to suppress file generation. Useful for website building, when you don't need the static files.
     /// </summary>
@@ -68,6 +70,7 @@ public class BlazorStaticOptions
     ///     IgnoredPathsOnContentCopy is "app.css" (this would be the path in output folder)
     /// </summary>
     public List<string> IgnoredPathsOnContentCopy { get; } = [];
+
     /// <summary>
     ///     Paths (files or dirs) relative to project root, that should be copied to output folder.
     ///     Content from RCLs (from _content/) and wwwroot is copied by default
@@ -78,17 +81,17 @@ public class BlazorStaticOptions
     ///     Allows to customize YamlDotNet Deserializer used for parsing front matter
     /// </summary>
     public IDeserializer FrontMatterDeserializer { get; set; } = new DeserializerBuilder()
-        .WithNamingConvention(CamelCaseNamingConvention.Instance)
-        .IgnoreUnmatchedProperties()
-        .Build();
+                                                                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                                                                 .IgnoreUnmatchedProperties()
+                                                                 .Build();
 
     /// <summary>
     ///     Allows to customize Markdig MarkdownPipeline used for parsing markdown files
     /// </summary>
     public MarkdownPipeline MarkdownPipeline { get; set; } = new MarkdownPipelineBuilder()
-        .UseAdvancedExtensions()
-        .UseYamlFrontMatter()
-        .Build();
+                                                             .UseAdvancedExtensions()
+                                                             .UseYamlFrontMatter()
+                                                             .Build();
 
 
     /// <summary>
@@ -141,15 +144,12 @@ public class BlazorStaticOptions
     }
 }
 
-
 /// <summary>
 /// Options for configuring processing of md files with front matter. Uses Post class
 /// </summary>
 /// <typeparam name="TFrontMatter">Any front matter type that inherits from IFrontMatter </typeparam>
-
-
 public class BlazorStaticContentOptions<TFrontMatter>
-    where TFrontMatter : class, IFrontMatter, new()
+where TFrontMatter : class, IFrontMatter, new()
 {
     /// <summary>
     /// Folder relative to project root where posts are stored.
@@ -165,27 +165,14 @@ public class BlazorStaticContentOptions<TFrontMatter>
     /// Null in case of no media folder.
     /// Default is "media"
     /// </summary>
-    public string? MediaFolderRelativeToContentPath { get; set; } = Path.Combine( "media" );
-
-
-    /// <summary>
-    /// URL path for media files for posts.
-    /// Used in app.UseStaticFiles to target the correct folder
-    /// and in ParseAndAddPosts to generate correct URLs for images.
-    /// Changes ![alt](media/image.png) to ![alt](Content/Blog/media/image.png).
-    /// Leading slash / is necessary for RequestPath in app.UseStaticFiles,
-    /// and is removed in ParseAndAddPosts. Null in case of no media.
-    /// </summary>
-    public string? MediaRequestPath  => MediaFolderRelativeToContentPath is null
-        ? null
-        : Path.Combine(ContentPath, MediaFolderRelativeToContentPath).Replace(@"\", "/");
+    [Obsolete("This is no longer needed, the paths are resolved automatically. Will be removed in future versions.")]
+    public string? MediaFolderRelativeToContentPath { get; set; } = "media";
 
     /// <summary>
     /// Pattern for blog post files in ContentPath.
     /// Default is
     /// </summary>
     public string PostFilePattern { get; set; } = "*.md";
-
 
 
     /// <summary>
@@ -212,10 +199,10 @@ public class BlazorStaticContentOptions<TFrontMatter>
     /// </exception>
     public void CheckOptions()
     {
-        if (string.IsNullOrWhiteSpace(ContentPath))
+        if( string.IsNullOrWhiteSpace(ContentPath) )
             throw new InvalidOperationException("ContentPath must be set and cannot be null or empty.");
 
-        if (string.IsNullOrWhiteSpace(PageUrl))
+        if( string.IsNullOrWhiteSpace(PageUrl) )
             throw new InvalidOperationException("PageUrl must be set and cannot be null or empty.");
     }
 
@@ -235,6 +222,7 @@ public class TagsOptions
     ///     tag pages will be generated from all tags found in blog posts
     /// </summary>
     public bool AddTagPagesFromPosts { get; set; } = true;
+
     /// <summary>
     ///     Should correspond to @page "/tags" (here in relative path: "tags")
     ///     Useful for avoiding magic strings in .razor files
@@ -249,7 +237,4 @@ public class TagsOptions
     /// Also don't forget to use the same encoder while creating tag links
     /// </summary>
     public Func<string, string> TagEncodeFunc { get; set; } = WebUtility.UrlEncode;
-
 }
-
-

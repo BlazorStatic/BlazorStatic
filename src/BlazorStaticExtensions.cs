@@ -15,6 +15,7 @@ public static class BlazorStaticExtensions
     private static readonly Dictionary<Type, Action> s_actionsToConfigureOptions = new();
 
     private static WebApplication? s_app;
+
     /// <summary>
     ///     holds the actions that will run when UseBlazorStaticGenerator is called.
     ///     Will manage content for every BlazorStaticContentService added.
@@ -22,7 +23,6 @@ public static class BlazorStaticExtensions
     ///     We use dictionary for type, because it removes the need for hassling with duplicate (in case of hot reload)
     /// </summary>
     private static Dictionary<Type, Action<WebApplication>> staticContentUse { get; } = [];
-
 
 
     /// <summary>
@@ -41,11 +41,9 @@ public static class BlazorStaticExtensions
     ///     The method configures and registers a singleton instance of BlazorStaticContentOptions`TFrontMatter` and
     ///     BlazorStaticContentService`TFrontMatter` in the service collection.
     /// </remarks>
-
-
     public static IServiceCollection AddBlazorStaticContentService<TFrontMatter>(this IServiceCollection services,
-        Action<BlazorStaticContentOptions<TFrontMatter>>? configureOptions = null)
-        where TFrontMatter : class, IFrontMatter, new()
+    Action<BlazorStaticContentOptions<TFrontMatter>>? configureOptions = null)
+    where TFrontMatter : class, IFrontMatter, new()
     {
         BlazorStaticContentOptions<TFrontMatter> options = new();
         ConfigureOptions();
@@ -65,13 +63,6 @@ public static class BlazorStaticExtensions
     }
 
 
-
-
-
-
-
-
-
     /// <summary>
     ///     Adds the Blazor static generation service to the specified IServiceCollection.
     /// </summary>
@@ -86,7 +77,7 @@ public static class BlazorStaticExtensions
     ///     providing customizable options for the generation process.
     /// </remarks>
     public static IServiceCollection AddBlazorStaticService(this IServiceCollection services,
-        Action<BlazorStaticOptions>? configureOptions = null)
+    Action<BlazorStaticOptions>? configureOptions = null)
     {
         services.AddSingleton<BlazorStaticHelpers>();
         var options = new BlazorStaticOptions();
@@ -107,48 +98,28 @@ public static class BlazorStaticExtensions
     /// <param name="app"></param>
     /// <typeparam name="TFrontMatter"></typeparam>
     private static void UseBlazorStaticContent<TFrontMatter>(WebApplication app)
-        where TFrontMatter : class, IFrontMatter, new()
+    where TFrontMatter : class, IFrontMatter, new()
     {
         var contentService = app.Services.GetRequiredService<BlazorStaticContentService<TFrontMatter>>();
-        contentService.Posts.Clear();//need to do it here in case of hot reload event
+        contentService.Posts.Clear(); //need to do it here in case of hot reload event
         var options = app.Services.GetRequiredService<BlazorStaticContentOptions<TFrontMatter>>();
         var blazorStaticService = app.Services.GetRequiredService<BlazorStaticService>();
 
 
         //Add static files for media files to be accessible while running the app
+        app.UseStaticFiles(new StaticFileOptions
+                           {
+                               FileProvider = new PhysicalFileProvider(Path.GetFullPath(options.ContentPath)),
+                               RequestPath = $"/{options.ContentPath}"
+                           });
 
-        //StaticFileOptions doesn't like ".." parent dir (e.g "Content/Blog/en/../media")
-        //This converts it to "/Content/Blog/media"...
-
-        if(options.MediaRequestPath is not null && options.MediaFolderRelativeToContentPath is not null)
-        {
-            var requestPath = "/" + Path.GetFullPath(options.MediaRequestPath)[Directory.GetCurrentDirectory().Length..]
-                .TrimStart(Path.DirectorySeparatorChar)
-                .Replace("\\", "/");
-
-
-            var realPath = Path.Combine(Directory.GetCurrentDirectory(), options.ContentPath, options.MediaFolderRelativeToContentPath);
-            if(!Directory.Exists(realPath))
-            {
-                app.Logger.LogWarning("folder for media path ({Folder}) doesn't exist", realPath);
-            }
-            else
-            {
-                app.UseStaticFiles(new StaticFileOptions
-                {
-                    FileProvider = new PhysicalFileProvider(realPath),
-                    RequestPath = requestPath
-                });
-            }
-        }
-        //
-
-        blazorStaticService.Options.AddBeforeFilesGenerationAction(contentService.ParseAndAddPosts);//will run later in GenerateStaticPages
+        blazorStaticService.Options.AddBeforeFilesGenerationAction(contentService
+        .ParseAndAddPosts); //will run later in GenerateStaticPages
     }
 
     internal static void UseBlazorStaticGeneratorOnHotReload()
     {
-        if(s_app == null)
+        if( s_app == null )
         {
             return;
         }
@@ -181,7 +152,7 @@ public static class BlazorStaticExtensions
         }
 
         var blazorStaticService = app.Services.GetRequiredService<BlazorStaticService>();
-        if(s_app is null && blazorStaticService.Options.HotReloadEnabled)
+        if( s_app is null && blazorStaticService.Options.HotReloadEnabled )
         {
             s_app = app;
         }
@@ -201,7 +172,7 @@ public static class BlazorStaticExtensions
             try
             {
                 await blazorStaticService.GenerateStaticPages(app.Urls.First()).ConfigureAwait(false);
-                if(shutdownApp)
+                if( shutdownApp )
                 {
                     lifetime.StopApplication();
                 }
@@ -220,22 +191,24 @@ public static class BlazorStaticExtensions
     /// <param name="fileProvider"></param>
     /// <param name="subPath"></param>
     /// <param name="blazorStaticService"></param>
-    private static void AddStaticWebAssetsToOutput(IFileProvider fileProvider, string subPath, BlazorStaticService blazorStaticService)
+    private static void AddStaticWebAssetsToOutput(IFileProvider fileProvider, string subPath,
+    BlazorStaticService blazorStaticService)
     {
         var contents = fileProvider.GetDirectoryContents(subPath);
 
         foreach(var item in contents)
         {
             var fullPath = $"{subPath}{item.Name}";
-            if(item.IsDirectory)
+            if( item.IsDirectory )
             {
                 AddStaticWebAssetsToOutput(fileProvider, $"{fullPath}/", blazorStaticService);
             }
             else
             {
-                if(item.PhysicalPath is not null)
+                if( item.PhysicalPath is not null )
                 {
-                    blazorStaticService.Options.ContentToCopyToOutput.Add(new ContentToCopy(item.PhysicalPath, fullPath));
+                    blazorStaticService.Options.ContentToCopyToOutput.Add(new ContentToCopy(item.PhysicalPath,
+                    fullPath));
                 }
             }
         }

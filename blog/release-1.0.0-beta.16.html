@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"><head><title>Blazor Static</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/">
+    <link rel="stylesheet" href="app.min.css">
+    <link rel="icon" type="image/png" href="imgs/blazor-static_200px.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    </head>
+
+<body class="bg-gray-950 font-tomorrow text-gray-200 "><div class="mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0 "><div class="flex h-screen flex-col justify-between"><header class="flex items-center justify-between py-10"><div><a aria-label="BlazorStatic" href><div class="flex items-center justify-between"><div class="mr-3"><img class="w-72" src="imgs/logo.png" alt="logo"></div></div></a></div>
+    <div class="flex items-center space-x-4 leading-5 sm:space-x-6"><a href="" class="hidden font-medium text-gray-100 sm:block">Home</a><a href="blog" class="hidden font-medium text-gray-100 sm:block bg-primary-950 px-2 py-1 rounded-xl" aria-current="page">Blog</a><a href="tags" class="hidden font-medium text-gray-100 sm:block">Tags</a><a href="docs" class="hidden font-medium text-gray-100 sm:block">Docs</a><a href="https://github.com/BlazorStatic/BlazorStatic/" class="hidden font-medium text-gray-100 sm:block"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="hover:text-primary-400 h-6 w-6 fill-current text-gray-200"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a><button id="toggle-button" aria-label="Toggle Menu" class="sm:hidden"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-8 w-8 text-gray-100"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg></button>
+        <div id="mobile-menu" class="fixed left-0 top-0 z-10 h-full w-full translate-x-full transform   duration-300 ease-in-out bg-gray-950 opacity-[0.98]"><div class="flex justify-end"><button id="close-mobile-menu-button" class="mr-8 mt-11 h-8 w-8" aria-label="Toggle Menu"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="text-gray-100"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></button></div>
+            <nav class="fixed mt-8 h-full"><div class="px-12 py-4"><a href="" class="text-2xl font-bold tracking-widest text-gray-100">Home</a></div><div class="px-12 py-4"><a href="blog" class="text-2xl font-bold tracking-widest text-gray-100 underline" aria-current="page">Blog</a></div><div class="px-12 py-4"><a href="tags" class="text-2xl font-bold tracking-widest text-gray-100">Tags</a></div><div class="px-12 py-4"><a href="docs" class="text-2xl font-bold tracking-widest text-gray-100">Docs</a></div><div class="px-12 py-4"><a href="https://github.com/BlazorStatic/BlazorStatic/" class="text-2xl font-bold tracking-widest text-gray-100"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="hover:text-primary-400 h-6 w-6 fill-current text-gray-200"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a></div></nav></div></div></header>
+<script>
+//👎 but what can I do? It's a static html. I can't use C# here.
+ const toggleMobileMenu = () => document.querySelector('#mobile-menu').classList.toggle('translate-x-full');
+
+ document.querySelector('#toggle-button').addEventListener('click', toggleMobileMenu);
+ document.querySelector('#close-mobile-menu-button').addEventListener('click', toggleMobileMenu);
+</script>
+
+        <main class="mb-auto"><article><div class="xl:divide-y  xl:divide-gray-700"><header class="pt-6 xl:pb-6"><div class="space-y-1 text-center"><dl class="space-y-10"><div><dt class="sr-only">Published on</dt>
+                        <dd class="text-base font-medium leading-6 text-gray-400"><time datetime="2025-11-15T00:00:00.000">November 15, 2025</time></dd></div></dl>
+                <div class="prose prose-invert mx-auto"><h1 class>1.0.0-beta 16 - Islands of content, image checks, auto image path resolver, test coverage</h1></div></div></header>
+        <div class="grid-rows-[auto_1fr] divide-y  pb-8 divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"><dl class="pb-10 pt-6 xl:border-b  xl:pt-11 xl:border-gray-700"><dt class="sr-only">Authors</dt>
+                <dd><ul class="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8"><li class="flex items-center space-x-2"><dl class="whitespace-nowrap text-sm font-medium leading-5"><dt class="sr-only">Name</dt>
+                                        <dd class="text-gray-900 dark:text-gray-100 flex gap-1 items-center">Jan Tesa&#x159;<a target="_blank" rel="noopener noreferrer" href="https://x.com/tesar-tech" class="flex gap-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" class="hover:text-primary-400 w-4 h-4 fill-current text-gray-200"><path d="M 5.9199219 6 L 20.582031 27.375 L 6.2304688 44 L 9.4101562 44 L 21.986328 29.421875 L 31.986328 44 L 44 44 L 28.681641 21.669922 L 42.199219 6 L 39.029297 6 L 27.275391 19.617188 L 17.933594 6 L 5.9199219 6 z M 9.7167969 8 L 16.880859 8 L 40.203125 42 L 33.039062 42 L 9.7167969 8 z"></path></svg></a><a target="_blank" rel="noopener noreferrer" href="https://github.com/tesar-tech" class="flex gap-1 items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="hover:text-primary-400 w-4 h-4 fill-current text-gray-200"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a></dd></dl></li></ul></dd></dl>
+            <div class="divide-y  divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0"><div class="prose prose-invert max-w-none pb-8 pt-10"><h2 id="breaking-changes">Breaking Changes</h2>
+<p>If your blog posts are in subfolders and use media paths that are <strong>not relative to the file</strong>, be aware that this might break.</p>
+<p>The good news? Relative paths are now resolved correctly.<br />
+So if your IDE displays images properly when working with markdown files, you can be confident that <strong>BlazorStatic</strong> will do the same.</p>
+<h2 id="posts-in-folders">Posts in folders</h2>
+<p>I often start a new blog post by creating a Markdown file that includes a publish date in the front matter.<br />
+I also put the date in the filename to sort posts chronologically. When I paste an image, a folder is created in the shared media directory named after the file.<br />
+That means the publish date appears in multiple places: the filename, the front matter, and every image path.</p>
+<p>It seems minor, but these small frictions add up. They discourage writing altogether.<br />
+This update reduces that friction by simplifying the content structure.</p>
+<p>Old structure:</p>
+<pre><code>Content/
+  Blog/
+      post1.md
+      post2.md
+      post3.md
+    media/
+      image.png
+      image2.png
+</code></pre>
+<p>New structure:</p>
+<pre><code>Content/
+  Blog/
+    post1/
+      index.md
+      media/
+        image.png
+    post2/
+      index.md
+      media/
+        image.png
+    post3/
+      index.md
+</code></pre>
+<p>In BlazorStatic, you can now choose your preferred folder structure or even mix both approaches.
+The new &quot;islands of content&quot; approach does require <em>more content</em> in the sense that each post now lives in its own folder, along with its media.</p>
+<p>But surprisingly, I find it nicer to work with.
+There's better separation of concerns: each post is self-contained, and nothing is scattered across unrelated folders.</p>
+<p>But in the end — it's your choice now.</p>
+<h2 id="auto-image-resolver">Auto Image Resolver</h2>
+<p>The <code>MediaFolderRelativeToContentPath</code> path is no longer needed.
+Previously, you had to manually set the folder where media for posts was stored-typically a <code>media</code> folder (which was the default).
+Now, BlazorStatic automatically finds the media folder by scanning all image tags and resolving the correct paths.
+For example, if a post is located at <code>Content/Blog/my-post/index.md</code> and contains an image reference like <code>![alt](media/image.png)</code>,
+the actual image should be located at <code>Content/Blog/my-post/media/image.png</code>. BlazorStatic will automatically rewrite the image path accordingly.</p>
+<p>It also removes the trailing <code>/index</code> from the final URLs. This results in cleaner, shorter URLs.
+While this behavior is currently hardcoded in the library, it could be made optional if there's a good reason.</p>
+<p>These changes eliminate several bootstrapping steps and make content organization simpler.</p>
+<p>However, there is one potential <strong>&quot;security issue&quot;</strong>. It's in quotes because it only exists during development and disappears after the site is generated to static files.</p>
+<p>The middleware now exposes the entire <code>ContentPath</code> directory under <code>/{ContentPath}</code> (typically <code>Content/Blog</code>).
+This means raw content files are accessible during development. Again, this is only temporary and doesn't expose your source code.</p>
+<p>If you see any issues with this approach, please share your feedback. There may be alternative solutions.
+For now, using <code>app.UseStaticFiles</code> for the entire content path was the simplest approach.</p>
+<hr />
+<p>Also, if removing the <code>MediaFolderRelativeToContentPath</code> option (which guaranteed its content would be copied) is a concern, you can still use the manual copy method:</p>
+<pre><code class="language-csharp">builder.Services.AddBlazorStaticService(opt =&gt; {
+    opt.ContentToCopyToOutput.Add(new ContentToCopy(&quot;Content/Docs/media&quot;, &quot;Content/Docs/media&quot;));
+});
+</code></pre>
+<h2 id="image-file-checker">Image File Checker</h2>
+<p>The auto image resolver updates paths <strong>only for relative images</strong>, and <strong>only if the image file actually exists</strong>.
+If an image is missing, a warning is logged to help you catch the issue during development.</p>
+<p><img src="Content/Blog/release-1.0.0-beta.16/media/20251111_001137.png" alt="what a beautiful warning" /></p>
+<h2 id="test-coverage">Test Coverage</h2>
+<p>Not exactly TDD, but this release includes the first batch of automated tests.<br />
+As coverage increases, the structure will evolve accordingly.<br />
+This is one reason why BlazorStatic is still in beta.<br />
+Version 1.0 will ship with solid test coverage.</p>
+<h2 id="feedback">Feedback</h2>
+<p>Share feedback by <a href="https://github.com/BlazorStatic/BlazorStatic/issues/new">creating an issue</a><br />
+or join the <a href="https://discord.gg/DsAXsMuEbx">Discord server</a>.</p>
+</div>
+                <div class="pb-6 pt-6 text-sm text-gray-300"><a target="_blank" rel="noopener noreferrer" href="https://github.com/BlazorStatic/BlazorStatic/tree/master/BlazorStaticWebsite/Content/Blog/release-1.0.0-beta.16.md">View on GitHub</a></div></div>
+            <footer><div class=" text-sm font-medium leading-5 divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y"><div class="py-4 xl:py-8"><h2 class="text-xs uppercase tracking-wide text-gray-400">Tags</h2>
+                        <div class="flex flex-wrap"><a class="text-primary-500 hover:text-primary-400 mr-3 text-sm font-medium uppercase" href="tags/release">release</a></div></div></div>
+                <div class="pt-4 xl:pt-8"><a class="text-primary-500 hover:text-primary-400" aria-label="Back to the blog" href="blog">← Back to the blog</a></div></footer></div></div></article></main>
+
+        <footer><div class="mt-16 flex flex-col items-center"><div class="mb-3 flex space-x-4"><a class="text-sm text-gray-500 transition hover:text-gray-600" target="_blank" rel="noopener noreferrer" href="https://github.com/BlazorStatic/BlazorStatic/"><span class="sr-only">github</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="hover:text-primary-400 h-6 w-6 fill-current text-gray-200"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a>
+
+                    <a class="text-sm text-gray-500 transition hover:text-gray-600" target="_blank" rel="noopener noreferrer" href="https://x.com/tesar-tech"><span class="sr-only">x</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" class="hover:text-primary-400 h-6 w-6 fill-current text-gray-200"><path d="M 5.9199219 6 L 20.582031 27.375 L 6.2304688 44 L 9.4101562 44 L 21.986328 29.421875 L 31.986328 44 L 44 44 L 28.681641 21.669922 L 42.199219 6 L 39.029297 6 L 27.275391 19.617188 L 17.933594 6 L 5.9199219 6 z M 9.7167969 8 L 16.880859 8 L 40.203125 42 L 33.039062 42 L 9.7167969 8 z"></path></svg></a></div>
+                <div class="mb-2 flex space-x-2 text-sm text-gray-400"><a target="_blank" rel="noopener noreferrer" href="https://github.com/BlazorStatic/BlazorStatic/">Blazor Static</a>
+                    <div>•</div>
+                    <div>© 2025</div></div></div></footer></div></div>
+        <blazor-focus-on-navigate selector="h1"></blazor-focus-on-navigate></body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+<script>hljs.highlightAll();</script></html><!--Blazor-Web-Initializers:WwogICJfY29udGVudC9NaWNyb3NvZnQuRmx1ZW50VUkuQXNwTmV0Q29yZS5Db21wb25lbnRzL01pY3Jvc29mdC5GbHVlbnRVSS5Bc3BOZXRDb3JlLkNvbXBvbmVudHMubGliLm1vZHVsZS5qcyIKXQ==-->

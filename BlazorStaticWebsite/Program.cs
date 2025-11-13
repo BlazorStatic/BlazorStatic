@@ -1,3 +1,4 @@
+using System.Globalization;
 using BlazorStatic;
 using BlazorStaticWebsite;
 using BlazorStaticWebsite.Components;
@@ -30,7 +31,20 @@ builder.Services.AddBlazorStaticService(opt => {
            opt.SiteUrl = WebsiteKeys.SiteUrl;
            opt.HotReloadEnabled = true;
        })
-       .AddBlazorStaticContentService<BlogFrontMatter>() //
+       .AddBlazorStaticContentService<BlogFrontMatter>(opt => {
+           opt.AfterContentParsedAndAddedAction = (service, contentService) => {
+               contentService.Posts.ForEach(post => {
+                   if( post.Url.Split('_', 2) is [var datePart, var rest]
+                       && DateTime.TryParseExact(datePart, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                       DateTimeStyles.None, out var published) )
+                   {
+                       post.Url = rest;
+                       post.FrontMatter.Published = published;
+                   }
+               });
+               service.Options.PagesToGenerate.ForEach(page => { });
+           };
+       }) //
        .AddBlazorStaticContentService<ProjectFrontMatter>(opt => {
            opt.ContentPath = Path.Combine("Content", "Projects");
            opt.PageUrl = WebsiteKeys.ProjectsUrl;

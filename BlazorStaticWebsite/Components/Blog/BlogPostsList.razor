@@ -3,20 +3,17 @@
 @inject BlazorStaticService blazorStaticService
 
 <ul class="divide-y divide-gray-700">
-    @foreach(var post in posts)
+    @foreach(var post in _posts)
     {
         <li class="py-12">
             <article>
                 <div class="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
-                    <dl>
-                        <dt class="sr-only">Published on</dt>
-                        <dd class="text-base font-medium leading-6 text-gray-400">
-
-                            <time datetime="@post.FrontMatter.Published.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
-                                @post.FrontMatter.Published.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
-                            </time>
-
-                        </dd>
+                    <dl class="space-y-2">
+                        @if (post.FrontMatter.Updated is { } updated)
+                        {
+                            @DateRow("Updated", updated)
+                        }
+                        @DateRow("Published", post.FrontMatter.Published)
                     </dl>
                     <div class="space-y-5 xl:col-span-3">
                         <div class="space-y-6">
@@ -47,15 +44,27 @@
 
 
 @code {
-    List<Post<BlogFrontMatter>> posts = [];
+    List<Post<BlogFrontMatter>> _posts = [];
 
 
     [Parameter] public List<Post<BlogFrontMatter>>? Posts { get; set; }
 
     protected override void OnInitialized()
     {
-        posts = Posts ?? blazorStaticContentService.Posts.OrderByDescending(x => x.FrontMatter.Published).ToList();
+        _posts = Posts ?? blazorStaticContentService.Posts
+            .OrderByDescending(x => x.FrontMatter.Updated ?? x.FrontMatter.Published)
+            .ToList();
         base.OnInitialized();
     }
+
+    RenderFragment DateRow(string label, DateTime date) => @<div>
+        <dt class="sr-only">@label on</dt>
+        <dd class="text-base font-medium leading-6 text-gray-400">
+            <span class="mr-2 text-xs uppercase tracking-wide text-gray-500">@label</span>
+            <time datetime="@date.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
+                @date.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
+            </time>
+        </dd>
+    </div>;
 
 }

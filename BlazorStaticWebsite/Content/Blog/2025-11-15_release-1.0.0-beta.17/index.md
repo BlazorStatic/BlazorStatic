@@ -1,12 +1,24 @@
 ---
-title: "Extract date from 2025-11-20_file.md and use it as publish date"
+title: "1.0.0-beta 17 realease, default front matter update"
 lead: ""
-tags: [tips]
+tags: [realease, tips]
 authors:
     - name: "Jan Tesař"
       gitHubUserName: "tesar-tech"
       xUserName: "tesar-tech"
 ---
+
+## Update to .net10
+
+- no issues so far
+
+## Default FrontMatter update
+
+Default `BlogFrontMatter` now supports `Updated` in addition to the existing `Published`.  
+This provides a way to indicate how current a post is, helping readers understand its age and relevance.  
+While it was previously possible to implement this manually, it is now built into the default front matter.
+
+## Tip: keep publish date in one place (ther filename)
 
 The DRY principle has me hard. In the [last realease](blog/release-1.0.0-beta.16) of BlazorStatic I intruduced the option to store you md files in a structure where
 every post has its own folder.

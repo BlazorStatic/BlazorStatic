@@ -34,6 +34,7 @@ builder.Services.AddBlazorStaticService(opt => {
        .AddBlazorStaticContentService<BlogFrontMatter>(opt => {
            opt.AfterContentParsedAndAddedAction = (service, contentService) => {
                contentService.Posts.ForEach(post => {
+                   //get the post date from the url (filename) if it is in format yyyy-MM-dd_post-name
                    if( post.Url.Split('_', 2) is [var datePart, var rest]
                        && DateTime.TryParseExact(datePart, "yyyy-MM-dd", CultureInfo.InvariantCulture,
                        DateTimeStyles.None, out var published) )

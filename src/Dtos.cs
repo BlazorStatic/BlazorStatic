@@ -1,4 +1,4 @@
-﻿namespace BlazorStatic;
+namespace BlazorStatic;
 
 
 /// <summary>
@@ -6,7 +6,7 @@
 /// </summary>
 public interface IFrontMatter
 {
-        /// <summary>
+    /// <summary>
     ///     If true, the blog post will not be generated.
     /// </summary>
     bool IsDraft => false;
@@ -56,7 +56,7 @@ public class Tag
 /// </summary>
 /// <typeparam name="TFrontMatter"></typeparam>
 public class Post<TFrontMatter>
-    where TFrontMatter: class, IFrontMatter, new()
+    where TFrontMatter : class, IFrontMatter, new()
 {
 
     /// <summary>
@@ -68,11 +68,11 @@ public class Post<TFrontMatter>
     ///     Processed from the file path (Content/Blog/subfolder/post-in-subfolder.md => blog/subfolder/post-in-subfolder).
     ///     Used as url param e.g.: "blog/{Url}".
     /// </summary>
-    public required  string Url { get; set; }
+    public required string Url { get; set; }
     /// <summary>
     ///     HTML content of the post. Parsed from md. Without front matter part.
     /// </summary>
-    public required  string HtmlContent { get; set; }
+    public required string HtmlContent { get; set; }
 
     /// <summary>
     /// Tag for the post.

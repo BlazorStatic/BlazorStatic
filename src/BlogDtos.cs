@@ -27,6 +27,11 @@ public class BlogFrontMatter : IFrontMatter, IFrontMatterWithTags
     public DateTime Published { get; set; } = DateTime.Now;
 
     /// <summary>
+    ///     Date of the most recent update to the blog post, if any.
+    /// </summary>
+    public DateTime? Updated { get; set; }
+
+    /// <summary>
     ///     Authors of the blog post.
     /// </summary>
     public List<Author> Authors { get; set; } = [];

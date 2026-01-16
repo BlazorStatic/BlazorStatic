@@ -1,7 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-
 @theme {
     /* Custom font */
     --font-tomorrow: "Tomorrow", "sans";
@@ -33,21 +32,20 @@
     --color-primary-950: var(--color-vidaloca-950);
 }
 
-
 @utility prose {
     @apply max-w-none;
 
     h1 {
-        @apply text-vidaloca-600;
+        @apply text-primary-600;
     }
     h2 {
-        @apply text-vidaloca-400;
+        @apply text-primary-400;
     }
     h3 {
-        @apply text-vidaloca-300;
+        @apply text-primary-300;
     }
     h4 {
-        @apply text-vidaloca-400;
+        @apply text-primary-400;
     }
     code {
         @apply text-violet-700;

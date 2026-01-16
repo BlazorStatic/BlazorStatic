@@ -1,5 +1,5 @@
-using Moq;
 using Microsoft.Extensions.Logging;
+using Moq;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -67,6 +67,7 @@ public class BlazorStaticHelpersTests
         Assert.Equal("Test Post", res.FrontMatter.Title);
 
         // Assert: warning was logged once
+#pragma warning disable CA1873 // Avoid potentially expensive logging
         _mockLogger.Verify(
         logger => logger.Log(
         LogLevel.Warning,
@@ -75,6 +76,7 @@ public class BlazorStaticHelpersTests
         null,
         (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
         Times.Once);
+#pragma warning restore CA1873 // Avoid potentially expensive logging
     }
 
     [Fact]
@@ -83,7 +85,7 @@ public class BlazorStaticHelpersTests
     {
         // Act
         var contentPath = "Content/Blog2";
-        string folderForPost = "folder-for-post";
+        var folderForPost = "folder-for-post";
         var fileAbsolutePath = Path.GetFullPath(Path.Combine(contentPath, folderForPost, "index.md"));
         // Act
         var res = await _blazorStaticHelpers.ParseMarkdownFile<TestFrontMatter>(fileAbsolutePath, contentPath);
@@ -105,8 +107,8 @@ public class BlazorStaticHelpersTests
     public async Task ParseMarkdownFile_WithoutMediaPaths_ReturnCorrectHtml()
     {
         // Arrange
-        string fakeFilePath = "test-no-paths.md";
-        string fakeMarkdownContent = $"""
+        var fakeFilePath = "test-no-paths.md";
+        var fakeMarkdownContent = $"""
                                       ## Example Markdown with Image
 
                                       ![example](media/sample.jpg)
@@ -116,7 +118,7 @@ public class BlazorStaticHelpersTests
         await File.WriteAllTextAsync(fakeFilePath, fakeMarkdownContent);
 
         // Act
-        string htmlContent = await _blazorStaticHelpers.ParseMarkdownFile(fakeFilePath);
+        var htmlContent = await _blazorStaticHelpers.ParseMarkdownFile(fakeFilePath);
 
         // Assert
         Assert.Contains("<h2 id=\"example-markdown-with-image\">Example Markdown with Image</h2>",
@@ -131,8 +133,8 @@ public class BlazorStaticHelpersTests
     public async Task ParseMarkdownFile_WithPascalCaseYamlDeserializer_ParsesCorrectly()
     {
         // Arrange
-        string filePath = "test-pascalcase.md";
-        string markdownContent = $"""
+        var filePath = "test-pascalcase.md";
+        var markdownContent = $"""
                                   ---
                                   Title: Pascal Case Test
                                   Description: Test YAML with PascalCase naming convention
@@ -270,19 +272,22 @@ public class BlazorStaticHelpersTests
             "Target directory should not exist if source path does not exist.");
 
             // Verify that an error was logged
+#pragma warning disable CA1873 // Avoid potentially expensive logging
             _mockLogger.Verify(
-            logger => logger.Log(
-            LogLevel.Error,
-            It.IsAny<EventId>(),
-            It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("does not exist")),
-            null,
-            (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()
-            ), Times.Once);
+                static logger => logger.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.Is<It.IsAnyType>((v, _) =>
+                        v.ToString()!.Contains("does not exist", StringComparison.Ordinal)),
+                    It.IsAny<Exception?>(),
+                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                Times.Once);
+#pragma warning restore CA1873 // Avoid potentially expensive logging
         }
         finally
         {
             // Cleanup
-            if( Directory.Exists(targetPath) )
+            if(Directory.Exists(targetPath))
             {
                 Directory.Delete(targetPath, true);
             }
@@ -300,26 +305,28 @@ public class BlazorStaticHelpersTests
         File.WriteAllText(sourceFilePath, "This is a test file.");
 
         // Act
-        _blazorStaticHelpers.CopyContent(sourceFilePath, targetPath, new List<string>());
+        _blazorStaticHelpers.CopyContent(sourceFilePath, targetPath!, []);
 
         try
         {
             // Assert: Verify that an error was logged
+#pragma warning disable CA1873 // Avoid potentially expensive logging
             _mockLogger.Verify(logger =>
             logger.Log(
             LogLevel.Error,
             It.IsAny<EventId>(),
             It.Is<It.IsAnyType>((v, t) =>
-            v.ToString().Contains($"Target directory path is null for the file: {sourceFilePath}")),
+            (v.ToString() ?? "").Contains($"Target directory path is null for the file: {sourceFilePath}")),
             null,
             (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
             Times.Once
             );
+#pragma warning restore CA1873 // Avoid potentially expensive logging
         }
         finally
         {
             // Cleanup: Delete the source file
-            if( File.Exists(sourceFilePath) )
+            if(File.Exists(sourceFilePath))
             {
                 File.Delete(sourceFilePath);
             }
@@ -330,8 +337,8 @@ public class BlazorStaticHelpersTests
     public async Task ParseMarkdownFile_WithNoYamlFrontMatter_LogsWarning()
     {
         // Arrange
-        string fakeFilePath = "test-no-yaml.md";
-        string fakeMarkdownContent = """
+        var fakeFilePath = "test-no-yaml.md";
+        var fakeMarkdownContent = """
                                      ## Example Markdown without Front Matter
                                      This file has no YAML front matter.
                                      """;
@@ -353,21 +360,23 @@ public class BlazorStaticHelpersTests
             Assert.IsType<TestFrontMatter>(res.FrontMatter);
 
             // Verify that a warning log was triggered for the missing YAML front matter
+#pragma warning disable CA1873 // Avoid potentially expensive logging
             _mockLogger.Verify(logger =>
             logger.Log(
             LogLevel.Warning,
             It.IsAny<EventId>(),
             It.Is<It.IsAnyType>((v, t) =>
-            v.ToString().Contains("No YAML front matter found in") && v.ToString().Contains(fakeFilePath)),
+                (v.ToString() ?? "").Contains("No YAML front matter found in") && (v.ToString() ?? "").Contains(fakeFilePath)),
             null,
             (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
             Times.Once
             );
+#pragma warning restore CA1873 // Avoid potentially expensive logging
         }
         finally
         {
             // Cleanup
-            if( File.Exists(fakeFilePath) )
+            if(File.Exists(fakeFilePath))
             {
                 File.Delete(fakeFilePath);
             }
@@ -378,8 +387,8 @@ public class BlazorStaticHelpersTests
     public async Task ParseMarkdownFile_WithInvalidYaml_LogsWarningAndReturnsDefault()
     {
         // Arrange
-        string fakeFilePath = "test-invalid-yaml.md";
-        string markdownContentWithInvalidYaml = $"""
+        var fakeFilePath = "test-invalid-yaml.md";
+        var markdownContentWithInvalidYaml = $"""
                                                  ---
                                                  title: :::: Invalid YAML here ::::
                                                  ---
@@ -396,18 +405,20 @@ public class BlazorStaticHelpersTests
         try
         {
             // Assert: Ensure a warning log is triggered for YAML deserialization failure
+#pragma warning disable CA1873 // Avoid potentially expensive logging
             _mockLogger.Verify(
             logger => logger.Log(
             LogLevel.Warning,
             It.IsAny<EventId>(),
             It.Is<It.IsAnyType>((v, t) =>
-            v.ToString().Contains("Cannot deserialize YAML front matter in")
-            && v.ToString().Contains(fakeFilePath)
-            && v.ToString().Contains("Error:")),
+            (v.ToString() ?? "").Contains("Cannot deserialize YAML front matter in")
+            && (v.ToString() ?? "").Contains(fakeFilePath)
+            && (v.ToString() ?? "").Contains("Error:")),
             null,
             (Func<It.IsAnyType, Exception?, string>)It.IsAny<object>()),
             Times.Once
             );
+#pragma warning restore CA1873 // Avoid potentially expensive logging
 
             // Assert: Ensure the HTML content was parsed correctly
             Assert.NotNull(res.HtmlContent);
@@ -421,18 +432,17 @@ public class BlazorStaticHelpersTests
         finally
         {
             // Cleanup: Delete the test Markdown file
-            if( File.Exists(fakeFilePath) )
+            if(File.Exists(fakeFilePath))
             {
                 File.Delete(fakeFilePath);
             }
         }
     }
 
-
     static void CreateTestSourceStructure(string sourcePath)
     {
         // Clean up if the directory already exists
-        if( Directory.Exists(sourcePath) )
+        if(Directory.Exists(sourcePath))
             Directory.Delete(sourcePath, true);
 
         // Create test folder structure
@@ -458,6 +468,6 @@ public class TestFrontMatter : IFrontMatter
 {
     public bool IsDraft { get; set; }
     public string Title { get; set; } = "";
-    public AdditionalInfo AdditionalInfo { get; set; }
+    public AdditionalInfo? AdditionalInfo { get; set; }
     public string Description { get; set; } = "";
 }

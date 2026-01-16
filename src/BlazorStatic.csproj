@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>Latest</LangVersion>
@@ -16,9 +15,12 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App"/>
   </ItemGroup>
+
   <ItemGroup>
-    <None Include="../README.md" Pack="true" PackagePath="/"/> <!--    readme from the repository root-->
-    <None Include="../BlazorStaticWebsite/wwwroot/imgs/logo.png" Pack="true" PackagePath="/BlazorStaticWebsite/wwwroot/imgs/"/><!--    logo to match what is inside the readme.md-->
+    <!--    readme from the repository root-->
+    <None Include="../README.md" Pack="true" PackagePath="/"/>
+    <!--    logo to match what is inside the readme.md-->
+    <None Include="../BlazorStaticWebsite/wwwroot/imgs/logo.png" Pack="true" PackagePath="/BlazorStaticWebsite/wwwroot/imgs/"/>
   </ItemGroup>
 
   <PropertyGroup>
@@ -26,9 +28,10 @@
     <Product>BlazorStatic</Product>
     <Description>Static site generator for Blazor</Description>
     <PackageId>BlazorStatic</PackageId>
-    <Version Condition="'$(EnvironmentName)' != 'Development'">1.0.0-beta.16</Version>
+    <Version Condition="'$(EnvironmentName)' != 'Development'">1.0.0-beta.17</Version>
     <!--Set EnvironmentName using dotnet build -c Release -p:EnvironmentName=Development for local package build-->
-    <Version Condition="'$(EnvironmentName)' == 'Development'">1.0.0-dev.$([System.DateTime]::Now.ToString("yyMMddHHmmss"))</Version>
+    <Version Condition="'$(EnvironmentName)' == 'Development'">
+      1.0.0-dev.$([System.DateTime]::Now.ToString("yyMMddHHmmss"))</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryUrl>https://github.com/BlazorStatic/BlazorStatic/</RepositoryUrl>
     <PackageProjectUrl>https://blazorstatic.net</PackageProjectUrl>
@@ -37,7 +40,5 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-
   </PropertyGroup>
-
 </Project>

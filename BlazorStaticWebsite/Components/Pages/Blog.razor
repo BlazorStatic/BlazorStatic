@@ -31,16 +31,12 @@
     <div class="xl:divide-y  xl:divide-gray-700">
         <header class="pt-6 xl:pb-6">
             <div class="space-y-1 text-center">
-                <dl class="space-y-10">
-                    <div>
-                        <dt class="sr-only">Published on</dt>
-                        <dd class="text-base font-medium leading-6 text-gray-400">
-                            <time
-                                datetime="@_post.FrontMatter.Published.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
-                                @_post.FrontMatter.Published.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
-                            </time>
-                        </dd>
-                    </div>
+                <dl class="space-y-3">
+                    @if (_post.FrontMatter.Updated is { } updated)
+                    {
+                        @DateRow("Updated", updated)
+                    }
+                    @DateRow("Published", _post.FrontMatter.Published)
                 </dl>
                 <div class="prose prose-invert mx-auto">
                     <h1 class="">@_post.FrontMatter.Title</h1>
@@ -131,5 +127,15 @@
                 ?? BlogService.Posts.FirstOrDefault(x =>
                 x.Url.Contains(PostUrl) && x.Url.EndsWith("index", StringComparison.InvariantCultureIgnoreCase));
     }
+
+    RenderFragment DateRow(string label, DateTime date) => @<div>
+        <dt class="sr-only">@label on</dt>
+        <dd class="text-base font-medium leading-6 text-gray-400">
+            <span class="mr-2 text-xs uppercase tracking-wide text-gray-500">@label</span>
+            <time datetime="@date.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
+                @date.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
+            </time>
+        </dd>
+    </div>;
 
 }

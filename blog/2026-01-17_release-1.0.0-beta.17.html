@@ -23,49 +23,7 @@
  document.querySelector('#close-mobile-menu-button').addEventListener('click', toggleMobileMenu);
 </script>
 
-        <main class="mb-auto"><article><div class="xl:divide-y  xl:divide-gray-700"><header class="pt-6 xl:pb-6"><div class="space-y-1 text-center"><dl class="space-y-3"><div><dt class="sr-only">Published on</dt>
-        <dd class="text-base font-medium leading-6 text-gray-400"><span class="mr-2 text-xs uppercase tracking-wide text-gray-500">Published</span>
-            <time datetime="2024-06-20T00:00:00.000">June 20, 2024</time></dd></div></dl>
-                <div class="prose prose-invert mx-auto"><h1 class>1.0.0-beta.9 - Refactoring and simplifications</h1></div></div></header>
-        <div class="grid-rows-[auto_1fr] divide-y  pb-8 divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"><dl class="pb-10 pt-6 xl:border-b  xl:pt-11 xl:border-gray-700"><dt class="sr-only">Authors</dt>
-                <dd><ul class="flex flex-wrap justify-center gap-4 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8"><li class="flex items-center space-x-2"><dl class="whitespace-nowrap text-sm font-medium leading-5"><dt class="sr-only">Name</dt>
-                                        <dd class="text-gray-900 dark:text-gray-100 flex gap-1 items-center">Jan Tesa&#x159;</dd></dl></li></ul></dd></dl>
-            <div class="divide-y  divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0"><div class="prose prose-invert max-w-none pb-8 pt-10"><h2 id="breaking-changes">Breaking Changes</h2>
-<ul>
-<li><code>BlogService</code> was renamed to <code>BlazorStaticContentService</code> as it serves more general purpose now.</li>
-<li><code>BlogService</code> was renamed to <code>AddBlazorStaticContentService</code>. Use this in your <code>Program.cs</code></li>
-<li><code>BlogOption</code> was also renamed to <code>BlazorStaticContentOptions</code>.</li>
-<li><code>FrontMatter</code> was renamed to <code>BlogFrontMatter</code> as it is directly related to blog posts. <code>IFrontMatter</code> is still there
-and can be used for any front matter of your choice.</li>
-<li><code>UseBlog&lt;TFrontMatter&gt;</code> extension was made private and is handled in <code>UseBlazorStaticGenerator</code>. This makes your code
-1 line shorter (remove <code>UseBlog</code> from your <code>Program.cs</code>)</li>
-</ul>
-<h2 id="more-on-these-changes">More on these changes:</h2>
-<p>Before:</p>
-<pre><code class="language-csharp">builder.Services
-    .AddBlogService&lt;FrontMatter&gt;()
-    .AddBlogService&lt;ProjectFrontMatter&gt;(opt =&gt; {
-        //...
-    });
- //..
-app.UseBlog&lt;FrontMatter&gt;();
-app.UseBlog&lt;ProjectFrontMatter&gt;();
-app.UseBlazorStaticGenerator(shutdownApp: !app.Environment.IsDevelopment());
-</code></pre>
-<p>Now:</p>
-<pre><code class="language-csharp">builder.Services
-    .AddBlazorStaticContentService&lt;BlogFrontMatter&gt;()
-    .AddBlazorStaticContentService&lt;ProjectFrontMatter&gt;(opt =&gt; {
-        //...
-    });
-//..
-app.UseBlazorStaticGenerator(shutdownApp: !app.Environment.IsDevelopment());
-</code></pre>
-</div>
-                <div class="pb-6 pt-6 text-sm text-gray-300"><a target="_blank" rel="noopener noreferrer" href="https://github.com/BlazorStatic/BlazorStatic/tree/master/BlazorStaticWebsite/Content/Blog/release-1.0.0-beta.9.md">View on GitHub</a></div></div>
-            <footer><div class=" text-sm font-medium leading-5 divide-gray-700 xl:col-start-1 xl:row-start-2 xl:divide-y"><div class="py-4 xl:py-8"><h2 class="text-xs uppercase tracking-wide text-gray-400">Tags</h2>
-                        <div class="flex flex-wrap"><a class="text-primary-500 hover:text-primary-400 mr-3 text-sm font-medium uppercase" href="tags/release">release</a></div></div></div>
-                <div class="pt-4 xl:pt-8"><a class="text-primary-500 hover:text-primary-400" aria-label="Back to the blog" href="blog">← Back to the blog</a></div></footer></div></div></article></main>
+        <main class="mb-auto"><div>Post not found 🤷</div></main>
 
         <footer><div class="mt-16 flex flex-col items-center"><div class="mb-3 flex space-x-4"><a class="text-sm text-gray-500 transition hover:text-gray-600" target="_blank" rel="noopener noreferrer" href="https://github.com/BlazorStatic/BlazorStatic/"><span class="sr-only">github</span>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="hover:text-primary-400 h-6 w-6 fill-current text-gray-200"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path></svg></a>

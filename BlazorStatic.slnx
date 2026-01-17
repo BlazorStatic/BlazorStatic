@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BlazorStaticWebsite/BlazorStaticWebsite.csproj" />
+  <Project Path="src/BlazorStatic.csproj" />
+  <Project Path="tests/BlazorStatic.Tests/BlazorStatic.Tests.csproj" />
+</Solution>

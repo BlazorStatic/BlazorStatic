@@ -10,37 +10,48 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseStaticWebAssets();
 
 builder.Services.AddBlazorStaticService(opt => {
-           opt.IgnoredPathsOnContentCopy.AddRange(["app.css"]); //pre-build version for tailwind
+    opt.IgnoredPathsOnContentCopy.AddRange(["app.css"]); //pre-build version for tailwind
 
-           opt.ContentToCopyToOutput.Add(new ContentToCopy("../.github/media", "media"));
-           opt.ContentToCopyToOutput.Add(new ContentToCopy("Content/Docs/media", "Content/Docs/media"));
+    opt.ContentToCopyToOutput.Add(new ContentToCopy("../.github/media", "media"));
+    opt.ContentToCopyToOutput.Add(new ContentToCopy("Content/Docs/media", "Content/Docs/media"));
 
-           // add docs pages
-           var docsFiles = Directory.GetFiles(Path.Combine("Content", "Docs"), "*.md")
-                                    .Where(x => !x.EndsWith(
-                                                "README.md")); //ignore readme, it is handled in Pages/Docs.razor
+    // add docs pages
+    var docsFiles = Directory.GetFiles(Path.Combine("Content", "Docs"), "*.md")
+                             .Where(x => !x.EndsWith(
+                                         "README.md")); //ignore readme, it is handled in Pages/Docs.razor
 
-           foreach(var fileName in docsFiles.Select(Path.GetFileNameWithoutExtension))
-           {
-               opt.PagesToGenerate.Add(new PageToGenerate($"/docs/{fileName}",
-               Path.Combine("docs", $"{fileName}.html")));
-           }
+    foreach(var fileName in docsFiles.Select(Path.GetFileNameWithoutExtension))
+    {
+        opt.PagesToGenerate.Add(new PageToGenerate($"/docs/{fileName}",
+        Path.Combine("docs", $"{fileName}.html")));
+    }
 
-           // Must add a site url to generate the Sitemap!
-           opt.ShouldGenerateSitemap = true;
-           opt.SiteUrl = WebsiteKeys.SiteUrl;
-           opt.HotReloadEnabled = true;
-       })
+    // Must add a site url to generate the Sitemap!
+    opt.ShouldGenerateSitemap = true;
+    opt.SiteUrl = WebsiteKeys.SiteUrl;
+    opt.HotReloadEnabled = true;
+})
        .AddBlazorStaticContentService<BlogFrontMatter>(opt => {
            opt.AfterContentParsedAndAddedAction = (service, contentService) => {
                contentService.Posts.ForEach(post => {
                    //get the post date from the url (filename) if it is in format yyyy-MM-dd_post-name
-                   if( post.Url.Split('_', 2) is [var datePart, var rest]
+                   if(post.Url.Split('_', 2) is [var datePart, var rest]
                        && DateTime.TryParseExact(datePart, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-                       DateTimeStyles.None, out var published) )
+                       DateTimeStyles.None, out var published))
                    {
-                       post.Url = rest;
-                       post.FrontMatter.Published = published;
+
+                       var pageToChangeUrlTo = service.Options.PagesToGenerate
+                          //this is kindy hacky. bcs tha AfterContentParsedAndAddedAction runs after the pages are added from posts. need to update that 
+                          .FirstOrDefault(page => page.Url.Split('/').Last() == post.Url);
+                       if(pageToChangeUrlTo != null)
+                       {
+                           post.Url = rest;
+                           post.FrontMatter.Published = published;
+                           service.Options.PagesToGenerate.Remove(pageToChangeUrlTo);
+                           service.Options.PagesToGenerate.Add(new PageToGenerate($"{contentService.Options.PageUrl}/{post.Url}",
+                           Path.Combine(contentService.Options.PageUrl, $"{post.Url}.html"), pageToChangeUrlTo.AdditionalInfo));
+
+                       }
                    }
                });
                service.Options.PagesToGenerate.ForEach(page => { });
@@ -61,7 +72,7 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if( !app.Environment.IsDevelopment() )
+if(!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -73,18 +84,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseStaticFiles(new StaticFileOptions
-                   {
-                       FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(),
                        "Content", "Docs", "media")),
-                       RequestPath = "/Content/Docs/media"
-                   });
+    RequestPath = "/Content/Docs/media"
+});
 
 app.UseStaticFiles(new StaticFileOptions //for readme images
-                   {
-                       FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "..",
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "..",
                        ".github", "media")),
-                       RequestPath = "/media"
-                   });
+    RequestPath = "/media"
+});
 
 
 app.UseAntiforgery();

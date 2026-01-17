@@ -72,9 +72,6 @@
     <loc>https://blazorstatic.net/blog/release-1.0.0-beta.16</loc>
   </url>
   <url>
-    <loc>https://blazorstatic.net/blog/2026-01-17_release-1.0.0-beta.17</loc>
-  </url>
-  <url>
     <loc>https://blazorstatic.net/tags/release</loc>
   </url>
   <url>
@@ -136,6 +133,9 @@
   </url>
   <url>
     <loc>https://blazorstatic.net/tags/.net%252FC%2523</loc>
+  </url>
+  <url>
+    <loc>https://blazorstatic.net/blog/release-1.0.0-beta.17</loc>
   </url>
   <url>
     <loc>https://blazorstatic.net/projects/README</loc>

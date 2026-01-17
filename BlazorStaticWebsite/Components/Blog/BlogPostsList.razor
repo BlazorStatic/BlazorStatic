@@ -1,39 +1,33 @@
 @using System.Globalization
+@using BlazorStaticWebsite.Components
 @inject BlazorStaticContentService<BlogFrontMatter> blazorStaticContentService
 @inject BlazorStaticService blazorStaticService
 
 <ul class="divide-y divide-gray-700">
-    @foreach(var post in _posts)
+    @foreach (var post in _posts)
     {
         <li class="py-12">
             <article>
                 <div class="space-y-2 xl:grid xl:grid-cols-4 xl:items-baseline xl:space-y-0">
                     <dl class="space-y-2">
-                        @if (post.FrontMatter.Updated is { } updated)
-                        {
-                            @DateRow("Updated", updated)
-                        }
-                        @DateRow("Published", post.FrontMatter.Published)
+                        <DateRow Published="post.FrontMatter.Published" Updated="post.FrontMatter.Updated" />
                     </dl>
                     <div class="space-y-5 xl:col-span-3">
                         <div class="space-y-6">
                             <div>
                                 <h2 class="text-2xl font-bold leading-8 tracking-tight">
-                                    <a class="text-gray-100" href="@blazorStaticContentService.Options.PageUrl/@(post.Url)">@post.FrontMatter.Title</a>
+                                    <a class="text-gray-100"
+                                        href="@blazorStaticContentService.Options.PageUrl/@(post.Url)">@post.FrontMatter.Title</a>
                                 </h2>
-                                <div class="flex flex-wrap">
-                                    @foreach(Tag tag in post.Tags)
-                                    {
-                                        <a class="text-primary-500 hover:text-primary-400 mr-3 text-sm font-medium uppercase" href="@($"{blazorStaticContentService.Options.Tags.TagsPageUrl}/{tag.EncodedName}")">@tag.Name</a>
-                                    }
-                                </div>
+                                <TagsComponent ClassPlus="mt-2" Tags="post.FrontMatter.Tags" />
                             </div>
                             <div class="prose max-w-none text-gray-400">
                                 @((MarkupString)post.FrontMatter.Lead)
                             </div>
                         </div>
                         <div class="text-base font-medium leading-6">
-                            <a class="text-primary-500 hover:text-primary-400" aria-label='Read "@(post.FrontMatter.Lead)"' href="@blazorStaticContentService.Options.PageUrl/@(post.Url)">Read more →</a>
+                            <a class="text-primary-500 hover:text-primary-400" aria-label='Read "@(post.FrontMatter.Lead)"'
+                                href="@blazorStaticContentService.Options.PageUrl/@(post.Url)">Read more →</a>
                         </div>
                     </div>
                 </div>
@@ -52,19 +46,8 @@
     protected override void OnInitialized()
     {
         _posts = Posts ?? blazorStaticContentService.Posts
-            .OrderByDescending(x => x.FrontMatter.Updated ?? x.FrontMatter.Published)
-            .ToList();
+        .OrderByDescending(x => x.FrontMatter.Updated ?? x.FrontMatter.Published)
+        .ToList();
         base.OnInitialized();
     }
-
-    RenderFragment DateRow(string label, DateTime date) => @<div>
-        <dt class="sr-only">@label on</dt>
-        <dd class="text-base font-medium leading-6 text-gray-400">
-            <span class="mr-2 text-xs uppercase tracking-wide text-gray-500">@label</span>
-            <time datetime="@date.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
-                @date.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
-            </time>
-        </dd>
-    </div>;
-
 }

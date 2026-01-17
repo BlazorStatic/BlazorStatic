@@ -7,22 +7,23 @@
 
 
 @* No filename -> show latest posts *@
-@if ( string.IsNullOrWhiteSpace(PostUrl) )
+@if (string.IsNullOrWhiteSpace(PostUrl))
 {
     <div class="divide-y divide-gray-700">
         <div class="space-y-2 pb-8 pt-6 md:space-y-5">
-            <h1 class="font-sans md:leading-14 text-3xl font-extrabold leading-9 tracking-tight text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl">
+            <h1
+                class="font-sans md:leading-14 text-3xl font-extrabold leading-9 tracking-tight text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl">
                 Latest</h1>
             <p class="text-lg leading-7 text-gray-400">posts about BlazorStatic</p>
         </div>
 
-        <BlogPostsList/>
+        <BlogPostsList />
     </div>
     return;
 }
 
 @* Show specific post by filename param *@
-@if ( _post == null )
+@if (_post == null)
 {
     <div>Post not found 🤷</div>
     return;
@@ -54,26 +55,25 @@
                         {
                             <li class="flex items-center space-x-2">
                                 @* <img alt="avatar" loading="lazy" width="38" height="38" decoding="async" data-nimg="1" class="h-10 w-10 rounded-full" srcset="/_next/image?url=%2Fstatic%2Fimages%2Favatar.png&amp;w=48&amp;q=75 1x, /_next/image?url=%2Fstatic%2Fimages%2Favatar.png&amp;w=96&amp;q=75 2x" src="/_next/image?url=%2Fstatic%2Fimages%2Favatar.png&amp;w=96&amp;q=75" style="color: transparent;"/> *@
-                                <dl class="whitespace-nowrap text-sm font-medium leading-5">
-                                    @if ( !string.IsNullOrWhiteSpace(author.Name) )
+                                        <dl class="whitespace-nowrap text-sm font-medium leading-5">
+                                    @if (!string.IsNullOrWhiteSpace(author.Name))
                                     {
                                         <dt class="sr-only">Name</dt>
                                         <dd class="text-gray-900 dark:text-gray-100 flex gap-1 items-center">
                                             @author.Name
-                                            @if ( !string.IsNullOrWhiteSpace(author.XUserName) )
+                                            @if (!string.IsNullOrWhiteSpace(author.XUserName))
                                             {
-                                                <a target="_blank" rel="noopener noreferrer"
-                                                   href="https://x.com/@author.XUserName"
-                                                   class="flex gap-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                                                    <Svg SizeClasses="w-4 h-4" Icon="Svg.Icons.X"/>
+                                                <a target="_blank" rel="noopener noreferrer" href="https://x.com/@author.XUserName"
+                                                    class="flex gap-1 text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                                                    <Svg SizeClasses="w-4 h-4" Icon="Svg.Icons.X" />
                                                 </a>
                                             }
-                                            @if ( !string.IsNullOrWhiteSpace(author.GitHubUserName) )
+                                            @if (!string.IsNullOrWhiteSpace(author.GitHubUserName))
                                             {
                                                 <a target="_blank" rel="noopener noreferrer"
-                                                   href="https://github.com/@author.GitHubUserName"
-                                                   class="flex gap-1 items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
-                                                    <Svg SizeClasses="w-4 h-4" Icon="Svg.Icons.Github"/>
+                                                    href="https://github.com/@author.GitHubUserName"
+                                                    class="flex gap-1 items-center text-primary-500 hover:text-primary-600 dark:hover:text-primary-400">
+                                                    <Svg SizeClasses="w-4 h-4" Icon="Svg.Icons.Github" />
                                                 </a>
                                             }
                                         </dd>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="pb-6 pt-6 text-sm text-gray-300">
                     <a target="_blank" rel="noopener noreferrer"
-                       href="@(WebsiteKeys.BlogPostStorageAddress + PostUrl + ".md")">View on GitHub</a>
+                        href="@(WebsiteKeys.BlogPostStorageAddress + PostUrl + ".md")">View on GitHub</a>
                 </div>
             </div>
             <footer>
@@ -98,17 +98,13 @@
                     <div class="py-4 xl:py-8">
                         <h2 class="text-xs uppercase tracking-wide text-gray-400">Tags</h2>
                         <div class="flex flex-wrap">
-                            @foreach (string tag in _post.FrontMatter.Tags)
-                            {
-                                <a class="text-primary-500 hover:text-primary-400 mr-3 text-sm font-medium uppercase"
-                                   href="@BlogService.Options.Tags.TagsPageUrl/@tag">@tag</a>
-                            }
+                            <TagsComponent ClassPlus="mt-2" Tags="_post.FrontMatter.Tags" />
                         </div>
                     </div>
                 </div>
                 <div class="pt-4 xl:pt-8">
                     <a class="text-primary-500 hover:text-primary-400" aria-label="Back to the blog"
-                       href="@BlogService.Options.PageUrl">← Back to the blog</a>
+                        href="@BlogService.Options.PageUrl">← Back to the blog</a>
                 </div>
             </footer>
         </div>
@@ -116,26 +112,26 @@
 </article>
 
 
-@code{
+@code {
     [Parameter] public string? PostUrl { get; set; }
     Post<BlogFrontMatter>? _post;
 
     protected override void OnInitialized()
     {
-        if ( string.IsNullOrWhiteSpace(PostUrl) ) return;
+        if (string.IsNullOrWhiteSpace(PostUrl)) return;
         _post = BlogService.Posts.FirstOrDefault(x => x.Url == PostUrl)
-                ?? BlogService.Posts.FirstOrDefault(x =>
-                x.Url.Contains(PostUrl) && x.Url.EndsWith("index", StringComparison.InvariantCultureIgnoreCase));
+        ?? BlogService.Posts.FirstOrDefault(x =>
+        x.Url.Contains(PostUrl) && x.Url.EndsWith("index", StringComparison.InvariantCultureIgnoreCase));
     }
 
     RenderFragment DateRow(string label, DateTime date) => @<div>
-        <dt class="sr-only">@label on</dt>
-        <dd class="text-base font-medium leading-6 text-gray-400">
-            <span class="mr-2 text-xs uppercase tracking-wide text-gray-500">@label</span>
-            <time datetime="@date.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
-                @date.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
-            </time>
-        </dd>
+            <dt class="sr-only">@label on</dt>
+            <dd class="text-base font-medium leading-6 text-gray-400">
+                <span class="mr-2 text-xs uppercase tracking-wide text-gray-500">@label</span>
+                <time datetime="@date.ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture)">
+                    @date.ToString("MMMM d, yyyy", new CultureInfo("en-US"))
+                </time>
+            </dd>
     </div>;
 
 }

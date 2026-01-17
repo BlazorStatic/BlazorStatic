@@ -1,0 +1,15 @@
+@using BlazorStatic
+@using BlazorStatic.Services
+@inject BlazorStaticContentService<BlogFrontMatter> blazorStaticContentService
+
+<div class="flex flex-wrap @ClassPlus">
+  @foreach (var tag in Tags)
+  {
+    <a class="text-primary-600 hover:text-primary-400 mr-3 text-sm font-medium uppercase"
+      href="@blazorStaticContentService.Options.Tags.TagsPageUrl/@tag">@tag</a>
+  }
+</div>
+@code {
+[Parameter] public List<string> Tags {get;set;}= [];
+[Parameter] public string ClassPlus {get;set;}= "";
+}

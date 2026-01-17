@@ -2,6 +2,7 @@
 title: "1.0.0-beta 17 release: .NET 10, FrontMatter with 'Updated' prop"
 lead: "The newest dotnet is supported, default FrontMatter has been slightly updated, and a few changes have been made to BlazorStatic.Templates."
 tags: [release]
+updated: 2026-01-18
 authors:
     - name: "Jan Tesař"
       gitHubUserName: "tesar-tech"
@@ -13,11 +14,13 @@ authors:
 The entire BlazorStatic project - including [BlazorStatic.Templates](https://github.com/BlazorStatic/BlazorStatic.Templates/) and [BlazorStaticMinimalBlog](https://github.com/BlazorStatic/BlazorStaticMinimalBlog) - has been updated to .net10.  
 There were no major issues during the upgrade process.
 
-## Default FrontMatter update
+## FrontMatter Update
 
 The default `BlogFrontMatter` now supports an `Updated` property in addition to the existing `Published`.  
 This allows you to indicate how current a post is, helping readers better understand its relevance.
 While this was previously achievable through custom implementation, it is now included by default.
+
+You can see the example on this very page.
 
 ## Template update
 
